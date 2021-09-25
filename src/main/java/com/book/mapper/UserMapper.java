@@ -10,15 +10,19 @@ public interface UserMapper {
 	
 	public void insertAuth(AuthVO auth);
 	
-	public UserVO read(String email);
+	public UserVO read(String usermail);
 	
 	public int update(UserVO user);
 	
+	public int updateInfo(UserVO user);
+	
 	public int delete(UserVO user);
 	
-	public UserVO check(String email);
+	public int deleteAuth(UserVO user);
 	
 	public UserVO dupNickCheck(String nick);
 	
 	public int upload(FileDTO file);
+	
+	public UserVO checkPw(String userpw);
 }

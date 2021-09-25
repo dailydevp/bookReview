@@ -2,10 +2,122 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.book.mapper.UserMapper"></mapper>
+  <mapper namespace="com.book.mapper.UserMapper">
   
   
   <insert id="insert">
-  	INSERT INTO 
+  	INSERT INTO member
+  	(usermail, userpw, nick, phoneNo)
+  	VALUES
+  	(#{usermail},#{userpw},#{nick},#{phoneNo})
   </insert>
   
+  <insert id="insertAuth">
+  	INSERT INTO auth
+  	(usermail, auth)
+  	VALUES
+  	(#{usermail}, #{auth})
+  </insert>
+  
+  
+  	<select id="read" resultMap="userMapper">
+		SELECT
+			m.usermail usermail,
+			m.userpw userpw,
+			m.nick nick,
+			m.phoneNo phoneNo,
+			m.regdate regdate,
+			a.auth auth
+		FROM
+			member m LEFT JOIN auth a 
+			ON m.usermail = a.usermail
+		WHERE 
+			m.usermail = #{usermail}
+		
+	</select>
+	
+	<update id="update">
+		UPDATE member
+		SET
+			userpw = #{userpw},
+			nick = #{nick},
+			phoneNo = #{phoneNo}
+		WHERE
+			usermail = #{usermail}
+	</update>
+	
+	<update id="updateInfo">
+		UPDATE member
+		SET
+			nick = #{nick},
+			phoneNo = #{phoneNo}			
+		WHERE
+			usermail = #{usermail}
+	</update>
+	
+	
+	<delete id="delete">
+		DELETE FROM member
+		WHERE usermail = #{usermail}
+	</delete>
+	
+	<delete id="deleteAuth">
+		DELETE FROM auth
+		WHERE usermail = #{usermail}
+	</delete>
+	
+	<select id="dupNickCheck" resultMap="userMapper">
+		SELECT 
+			m.usermail usermail,
+			m.nick nick,
+			a.usermail usermail
+		FROM 
+			member m LEFT JOIN auth a 
+			ON m.usermail = a.usermail
+		WHERE
+			m.nick = #{nick}
+	</select>
+	
+	<select id = "checkPw" resultMap = "userMapper">
+		SELECT
+			m.usermail usermail,
+			m.userpw userpw,
+			a.usermail usermail
+		FROM
+			member m LEFT JOIN auth a
+			ON m.usermail = a.usermail
+		WHERE
+			m.userpw = #{userpw}
+	</select>
+
+	<update id ="upload">
+		UPDATE member 
+		SET
+			fileName = #{fileName}
+		WHERE
+			sermail = #{usermail}
+	</update>
+  
+  
+  
+  <resultMap type="com.book.domain.UserVO" id="userMapper">
+  	<id property="usermail" column="usermail"/>
+  	<result property="userpw" column="userpw" />
+  	<result property="nick" column ="nick" />
+  	<result property="phoneNo" column = "phoneNo" />
+  	<result property="regdate" column = "regdate" />
+  	<result property="fileName" column="fileName" />
+  	<collection property="authList" resultMap="authMapper"/>
+  </resultMap>
+  
+  <resultMap type="com.book.domain.AuthVO" id="authMapper">
+  	<result property="usermail" column="usermail" />
+  	<result property="auth" column="auth" />
+  </resultMap>
+  
+   <resultMap type="com.book.domain.FileDTO" id="fileM">
+  	<result property="fileName" column="fileName"/>
+  	<result property="fileRealName" column="fileRealName"/>
+  </resultMap>
+  
+  </mapper>

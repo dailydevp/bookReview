@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.book.mapper.ArtBoardMapper">
+ <sql id="criteria">
+ 	<where>
+ 		<foreach item="type" separator="OR" collection="typeArray">
+ 			<choose>
+ 				<when test='type=="T"'>
+ 					b.title LIKE CONCAT('%', #{keyword} , '%')
+ 				</when>
+ 				<when test='type=="W"'>
+ 					b.writer LIKE CONCAT('%', #{keyword} , '%')
+ 				</when>
+ 				<when test='type=="C'>
+ 					b.content LIKE CONCAT('%', #{keyword} , '%')
+ 				</when>
+ 			</choose>
+ 		</foreach>
+ 	</where>
+ </sql>
+ 
+  	<select id="getList" resultType="com.book.domain.ArtBoardVO">
+ 		<![CDATA[
+ 		SELECT * 
+ 		FROM a_board 
+ 		where bno > 0
+ 		ORDER BY bno DESC
+ 		]]>
+ 	</select>
+ 	
+ 	<select id="getListWithPaging" resultType="com.book.domain.ArtBoardVO">
+ 		SELECT
+ 			a.bno bno,
+ 			a.categorie categorie,
+	 		a.region region,
+ 			a.title title,
+ 			a.content content,
+ 			a.address address,
+ 			a.writer writer,
+ 			a.regDate regDate,
+ 			a.updateDate updateDate,
+ 			a.galleryName galleryName,
+	 		a.startDate startDate,
+	 		a.endDate endDate,
+ 			m.nick writerName,
+ 			count(r.rno) replyCnt
+ 		FROM a_board a LEFT JOIN a_reply r ON a.bno = r.bno
+ 						INNER JOIN member m ON a.writer = m.usermail
+ 						
+ 		<include refid="criteria"></include>
+ 		GROUP BY a.bno
+ 		ORDER BY a.bno DESC
+ 		LIMIT #{from}, #{amount}
+ 	
+ 	</select>
+ 	
+ 	<insert id = "insert">
+ 		INSERT INTO a_board
+ 		(categorie, region, title, content, address, writer, galleryName, startDate, endDate)
+ 		VALUES
+ 		(#{categorie},#{region},#{title},#{content},#{address},#{writer},#{galleryName},#{startDate},#{endDate})
+ 	</insert>
+ 	
+ 	<insert id="insertSelectKey" useGeneratedKeys="true" keyProperty="bno" keyColumn="bno">
+ 		INSERT INTO a_board
+ 		(categorie, region, title, content, address, writer, galleryName, startDate, endDate)
+ 		VALUES
+ 		(#{categorie},#{region},#{title},#{content},#{address},#{writer},#{galleryName},#{startDate},#{endDate})
+ 	</insert>
+ 	
+ 	<select id="read" resultType="com.book.domain.ArtBoardVO">
+	 	SELECT
+	 		a.bno bno,
+	 		a.categorie categorie,
+	 		a.region region,
+	 		a.title title,
+	 		a.content content,
+	 		a.address address,
+	 		a.writer writer,
+	 		a.galleryName galleryName,
+	 		a.startDate startDate,
+	 		a.endDate endDate,
+	 		f.fileName fileName,
+	 		m.nick writerName
+	 	FROM a_board a LEFT JOIN a_file f ON a.bno = f.bno
+ 						JOIN member m ON a.writer = m.usermail
+ 		WHERE a.bno = #{bno}
+ 	</select>
+ 	
+ 	<delete id="delete">
+ 		DELETE
+ 		FROM a_board
+ 		WHERE bno = #{bno}
+ 	</delete>
+ 	
+ 	<update id="update">
+ 		UPDATE a_board
+ 		SET
+	 		 region = #{region},
+	 		 title = #{title},
+	 		 content = #{content},
+	 		 address = #{address},
+	 		 writer = #{writer},
+	 		 galleryName = #{galleryName},
+	 		 startDate = #{startDate},
+	 		 endDate = #{endDate}
+	 		 updateDate = NOW()
+ 		WHERE
+ 			bno = #{bno}			
+ 	</update>
+ 
+ 	<select id="getTotalCount" resultType="int">
+ 		SELECT COUNT (*) FROM a_board a
+ 		<include refid="criteria"></include>
+ 	</select>
+ 	
+ 	<delete id="deleteByUsermail">
+ 		DELETE FROM a_board WHERE writer=#{usermail}
+ 	</delete>
+ 
+ </mapper>

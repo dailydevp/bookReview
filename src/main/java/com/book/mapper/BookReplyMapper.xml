@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.book.mapper.BookReplyMapper">
+ 
+ 	<select id="getList" resultType="com.book.domain.BookReplyVO">
+ 		SELECT
+ 			r.rno rno,
+ 			r.bno bno,
+ 			r.reply reply,
+ 			r.replyer replyer,
+ 			r.replyDate replyDate,
+ 			r.updateDate updateDate,
+ 			r.likes likes,
+ 			m.nick replyerName
+ 		FROM
+ 			b_reply r JOIN member m ON r.replyer = m.usermail
+ 		WHERE
+ 			r.bno = #{bno}
+ 		ORDER BY r.rno DESC			
+ 	</select>
+ 	
+ 	<insert id="insert">
+ 		INSERT INTO
+ 		b_reply 
+ 		(bno, reply, replyer)
+ 		VALUES 
+ 		(#{bno}, #{reply}, #{replyer})
+ 	</insert>
+	
+	<select id="read" resultType="com.book.domain.BookReplyVO">
+		SELECT
+			r.rno rno,
+			r.bno bno,
+			r.reply reply,
+			r.replyer replyer,
+			r.replyDate replyDate,
+			r.updateDate updateDate,
+			r.likes likes,
+			m.nick replyerName
+		FROM
+			b_reply r JOIN member m ON r.replyer = m.usermail
+		WHERE
+			r.rno = #{rno}
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM b_reply
+		WHERE rno = #{rno}
+	</delete>
+	
+	<update id="update">
+		UPDATE b_reply
+		SET
+			reply = #{reply},
+			replyer = #{replyer},
+			updateDate = now()
+		WHERE 
+			rno = #{rno}
+	</update>
+	
+	<select id="getCountByBno" resultType="int">
+		SELECT COUNT(*) 
+		FROM b_reply 
+		WHERE bno = #{bno}
+	</select>
+	
+	<delete id="deleteByBno">
+		DELETE FROM b_reply
+		WHERE bno = #{bno}
+	</delete>
+	
+	<delete id="deleteByUsermail">
+		DELETE FROM b_reply
+		WHERE replyer = #{usermail}
+	</delete>
+
+	<delete id="deleteByBnoUsermail">
+		DELETE FROM b_reply
+		WHERE bno IN (SELECT bno FROM b_board WHERE writer = #{usermail})
+	</delete>
+	
+ </mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.book.mapper.BookBoardMapper">
+ 
+ <sql id="criteria">
+ 	<where>
+ 		<foreach item="type" separator="OR" collection="typeArray">
+ 			<choose>
+ 				<when test='type=="T"'>
+ 					b.title LIKE CONCAT('%', #{keyword} , '%')
+ 				</when>
+ 				<when test='type=="W"'>
+ 					b.writer LIKE CONCAT('%', #{keyword} , '%')
+ 				</when>
+ 				<when test='type=="C"'>
+ 					b.content LIKE CONCAT('%', #{keyword} , '%')
+ 				</when>
+ 			</choose>
+ 		</foreach>
+ 	</where>
+ </sql>
+ 
+ 	<select id="getList" resultType="com.book.domain.BookBoardVO">
+ 		<![CDATA[
+ 		SELECT 
+ 			b.bno bno,
+ 			b.categorie categorie,
+ 			b.title title,
+ 			b.content content,
+ 			b.writer writer,
+ 			b.regDate regDate,
+ 			b.updateDate updateDate,
+ 			b.views views,
+ 			b.likes likes,
+ 			f.fileName fileName,
+ 			m.nick writerName,
+ 		--	count (r.bno) replyCnt,
+ 		--	sum(l.lno) likesCnt
+ 		
+ 		--	count reply
+ 			(SELECT COUNT(*) FROM b_reply r WHERE r.bno = b.bno) replyCnt,
+ 			
+ 		--	sum likes
+ 			(SELECT IFNULL(SUM(l.lno),0) FROM b_likes l WHERE l.bno = b.bno) likesCnt
+ 		FROM b_board  b
+ 			--	LEFT JOIN b_reply r ON b.bno = r.bno
+ 				INNER JOIN member m ON b.writer = m.usermail
+ 				LEFT JOIN b_file f ON b.bno = f.bno
+ 			--	LEFT JOIN b_likes l ON b.bno = l.bno
+ 		where b.bno > 0
+ 		ORDER BY b.bno DESC
+ 		]]>
+ 	</select>
+ 	
+ 	<select id="getListWithPaging" resultType="com.book.domain.BookBoardVO">
+ 	
+ 		SELECT
+ 			b.bno bno,
+ 			b.categorie categorie,
+ 			b.title title,
+ 			b.content content,
+ 			b.writer writer,
+ 			b.regDate regDate,
+ 			b.updateDate updateDate,
+ 			b.views views,
+ 			m.nick writerName,
+ 			f.fileName fileName,
+ 		-- count(r.rno) replyCnt,
+ 		-- sum(l.lno) likesCnt
+ 		
+ 		-- count reply
+ 			(SELECT COUNT(*) FROM b_reply r WHERE r.bno = b.bno) replyCnt,
+ 			
+ 		-- sum likes
+ 			(SELECT IFNULL(SUM(l.lno), 0) FROM b_likes l WHERE l.bno = b.bno) likesCnt
+ 		FROM b_board b 
+ 					--	LEFT JOIN b_reply r ON b.bno = r.bno
+ 						INNER JOIN member m ON b.writer = m.usermail
+ 						LEFT JOIN b_file f ON b.bno = f.bno
+ 					--	LEFT JOIN b_likes l ON b.bno = l.bno
+ 						
+ 						
+ 		<include refid="criteria"></include>
+ 		GROUP BY b.bno
+ 		ORDER BY b.bno DESC
+ 		LIMIT #{from}, #{amount}
+ 	</select>
+ 	
+ 	<insert id = "insert">
+ 	INSERT INTO b_board
+ 	(categorie, title, content, writer)
+ 	VALUES
+ 	(#{categorie}, #{title},#{content},#{writer})
+ 	</insert>
+ 	
+ 	<insert id="insertSelectKey" useGeneratedKeys="true" keyProperty="bno" keyColumn="bno">
+ 		INSERT INTO b_board
+ 		(categorie,title, content, writer)
+ 		VALUES
+ 		(#{categorie}, #{title},#{content},#{writer})
+ 	</insert>
+ 	
+ 	<select id="read" resultType="com.book.domain.BookBoardVO">
+ 		SELECT
+ 			b.bno bno,
+ 			b.categorie categorie,
+ 			b.title title,
+ 			b.content content,
+ 			b.writer writer,
+ 			b.regDate regDate,
+ 			b.updateDate updateDate,
+ 			f.fileName fileName,
+ 			m.nick writerName
+ 		FROM b_board b LEFT JOIN b_file f ON b.bno = f.bno
+ 						JOIN member m ON b.writer = m.usermail
+ 		WHERE b.bno = #{bno}
+ 	</select>
+ 
+ 	<delete id="delete">
+ 		DELETE 
+ 		FROM b_board
+ 		WHERE bno = #{bno}		
+ 	</delete>
+ 	
+ 	<update id="update">
+ 		UPDATE 
+ 		b_board
+ 		SET
+ 			title = #{title},
+ 			content = #{content},
+ 			writer = #{writer},
+ 			updateDate = NOW()
+ 		WHERE
+ 			bno = #{bno}
+ 	</update>
+ 	
+ 	<select id="getTotalCount" resultType="int">
+ 		SELECT 
+ 		COUNT (*)
+ 		FROM b_board b
+ 	<include refid="criteria"></include>
+ 	</select>
+ 	
+ 	<delete id="deleteByUsermail">
+ 		DELETE
+ 		FROM b_board
+ 		WHERE writer=#{usermail}
+ 	</delete>
+ </mapper>

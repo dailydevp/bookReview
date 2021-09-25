@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+		
+
+
+		
+		
+		<bean id="bcryptPasswordEncoder" 
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+		<bean id="userDetailsService" 
+		class="com.book.security.CustomUserDetailsService"></bean>
+		
+		
+		
+	
+		
+		
+		<security:http>
+			<security:intercept-url pattern="/secure/all" access="permitAll"/>
+			<security:intercept-url pattern="/secure/member" access="hasRole('ROLE_MEMBER')"/>
+			<security:intercept-url pattern="/secure/admin" access="hasRole('ROLE_ADMIN')"/>
+			
+					<!-- 로그인된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함	-->
+  		<security:intercept-url pattern="/member/signin" access="isAnonymous()" />
+		<security:intercept-url pattern="/member/signup" access="isAnonymous()" />
+
+			<security:form-login login-page="/member/signin" default-target-url="/board/list"
+								authentication-failure-url="/member/fail"/>
+ 		<security:logout logout-success-url="/member/signin"
+ 		delete-cookies="JSESSIONID"/>			
+			<security:csrf disabled="true"/>
+			<security:remember-me data-source-ref="dataSource"/>
+		</security:http>
+
+		<security:authentication-manager>
+			<security:authentication-provider user-service-ref="userDetailsService">
+				<security:password-encoder ref="bcryptPasswordEncoder"/>
+					
+			</security:authentication-provider>
+		</security:authentication-manager>
+
+
+
+</beans>

@@ -25,4 +25,6 @@ public interface ArtBoardMapper {
 	public int getTotalCount(Criteria cri);
 	
 	public void deleteByUsermail(UserVO vo);
+
+	public int views(Long bno);
 }

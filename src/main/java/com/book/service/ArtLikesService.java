@@ -16,6 +16,7 @@ public interface ArtLikesService {
 	
 	public List<Long> getList(String name);
 	
-	public Long ClickAdd(String usermail, Long bno);
+	public Long clickAdd(String name, Long bno);
+
 
 }

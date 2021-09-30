@@ -110,7 +110,7 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 			
 			PutObjectRequest objectRequest = PutObjectRequest.builder()
 					.bucket(bucketName)
-					.key(board.getBno()+ "/" + file.getOriginalFilename())
+					.key("art/" + board.getBno()+ "/" + file.getOriginalFilename())
 					.contentType(file.getContentType())
 					.acl(ObjectCannedACL.PUBLIC_READ)
 					.build();
@@ -149,7 +149,7 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 	}
 
 	private void deleteFile(ArtBoardVO vo) {
-		String key = vo.getBno()+"/"+vo.getFileName();
+		String key = "art/" + vo.getBno()+"/"+vo.getFileName();
 		
 		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
 				.bucket(bucketName)
@@ -173,6 +173,10 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 		int cnt = mapper.delete(bno);
 		
 		return cnt == 1;
+	}
+	@Override
+	public int views(Long bno) {
+		return mapper.views(bno);
 	}
 
 }

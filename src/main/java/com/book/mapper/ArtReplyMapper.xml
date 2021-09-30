@@ -11,7 +11,7 @@
  			r.bno bno,
  			r.reply reply,
  			r.replyer replyer,
- 			r.replyDate replyDate,
+ 			r.regDate regDate,
  			r.updateDate updateDate,
  			m.nick replyerName
  		FROM
@@ -43,7 +43,7 @@
 			r.bno bno,
 			r.reply reply,
 			r.replyer replyer,
-			r.replyDate replyDate,
+			r.regDate regDate,
 			r.updateDate updateDate,
 			m.nick replyerName
 		FROM

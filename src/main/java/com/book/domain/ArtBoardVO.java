@@ -1,6 +1,7 @@
 package com.book.domain;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 import lombok.Data;
 
@@ -24,10 +25,10 @@ public class ArtBoardVO {
 	private int likes;
 	private int views;
 	
-	private int likeClicked;
-	private int viewCnt;
+	private boolean likeClicked;
+
 	private int replyCnt;
-	private int likeCnt;
+	private int likesCnt;
 	
 	private String fileName;
 

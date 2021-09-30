@@ -1,5 +1,6 @@
 package com.book.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import com.book.domain.ArtBoardVO;
 import com.book.domain.ArtPageDTO;
 import com.book.domain.Criteria;
 import com.book.service.ArtBoardService;
+import com.book.service.ArtLikesService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -28,16 +30,33 @@ import lombok.extern.log4j.Log4j;
 public class ArtBoardController {
 	
 	private ArtBoardService service;
+	public ArtLikesService lservice;
 	
 	@RequestMapping("/list")
-	public void list(@ModelAttribute("cri")Criteria cri, Model model) {
-		log.info("전시리스트!");
+	public void list(@ModelAttribute("cri")Criteria cri, Model model, Principal principal) {
+		log.info("전시리스트!" + cri);
 		
 		int total = service.getTotal(cri);
 		
 		List<ArtBoardVO> list = service.getList(cri);
 		model.addAttribute("list" , list);
 		model.addAttribute("pageMaker" , new ArtPageDTO(cri, total));
+		
+		log.info(principal);
+		
+		//좋아요
+		if (principal != null) {
+			List<Long> likesList = lservice.getList(principal.getName());
+			
+			log.info(likesList);
+			
+			for (ArtBoardVO vo : list) {
+				if (likesList.contains(vo.getBno())) {
+					log.info(vo);
+					vo.setLikeClicked(true);
+				}
+			}
+		}
 	}
 	
 	@GetMapping("/write")
@@ -60,18 +79,32 @@ public class ArtBoardController {
 		rttr.addFlashAttribute("messageTitle", "등록 성공!");
 		rttr.addFlashAttribute("messageBody", board.getBno() + "번 게시물 등록 되었슴둥.");
 		
-		return "redirect:/board/list";
+		return "redirect:/art/list";
 		
 		
 	}
 	
 	@RequestMapping({"/read" , "/modify"})
-	public void read(@RequestParam("bno")Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void read(@RequestParam("bno")Long bno, @ModelAttribute("cri") Criteria cri, Model model, Principal principal) {
 		log.info("artboard read! 읽기");
 		
 		ArtBoardVO vo = service.read(bno);
 		
+	//	model.addAttribute("board", vo);
+		
+		//좋아요
+		if (principal != null) {
+			Long likeClicked = lservice.clickAdd(principal.getName(), vo.getBno());
+			Long one = 1L;
+			if (one.equals(likeClicked)) {
+				vo.setLikeClicked(true);
+			}
+		}
+		
+		
 		model.addAttribute("board", vo);
+		
+		service.views(bno);
 	}
 	
 	@PostMapping("/modify")
@@ -92,7 +125,7 @@ public class ArtBoardController {
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
 		
-		return "redirect :/art/list";
+		return "redirect:/art/list";
 	}
 	
 	@PostMapping("/delete")
@@ -112,7 +145,7 @@ public class ArtBoardController {
 		rttr.addAttribute("type", cri.getType());
 		rttr.addAttribute("keyword", cri.getKeyword());
 		
-		return "redirect :/board/list";
+		return "redirect:/art/list";
 	}
 	
 

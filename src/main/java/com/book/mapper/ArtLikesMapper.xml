@@ -13,7 +13,7 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO likes
+		INSERT INTO a_likes
 			(usermail, bno, lno)
 		VALUES
 			(#{usermail},#{bno}, 1)
@@ -31,14 +31,14 @@
 		WHERE usermail=#{usermail} and bno = #{bno}
 	</update>
 	
-	<select id="list" resultType="long">
+	<select id="list" resultType="Long">
 		SELECT bno 
 		FROM a_likes
 		WHERE usermail = #{usermail}
 			AND lno = 1
 	</select>
 	
-	<select id="clickAdd">
+	<select id="clickAdd" resultType="Long">
 		SELECT lno
 		FROM a_likes
 		WHERE usermail = #{usermail}

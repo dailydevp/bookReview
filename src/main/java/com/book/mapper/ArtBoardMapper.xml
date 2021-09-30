@@ -8,13 +8,13 @@
  		<foreach item="type" separator="OR" collection="typeArray">
  			<choose>
  				<when test='type=="T"'>
- 					b.title LIKE CONCAT('%', #{keyword} , '%')
+ 					a.title LIKE CONCAT('%', #{keyword} , '%')
  				</when>
  				<when test='type=="W"'>
- 					b.writer LIKE CONCAT('%', #{keyword} , '%')
+ 					a.writer LIKE CONCAT('%', #{keyword} , '%')
  				</when>
- 				<when test='type=="C'>
- 					b.content LIKE CONCAT('%', #{keyword} , '%')
+ 				<when test='type=="C"'>
+ 					a.content LIKE CONCAT('%', #{keyword} , '%')
  				</when>
  			</choose>
  		</foreach>
@@ -23,8 +23,36 @@
  
   	<select id="getList" resultType="com.book.domain.ArtBoardVO">
  		<![CDATA[
- 		SELECT * 
- 		FROM a_board 
+ 			SELECT
+ 			a.bno bno,
+ 			a.categorie categorie,
+	 		a.region region,
+ 			a.title title,
+ 			a.content content,
+ 			a.address address,
+ 			a.writer writer,
+ 			a.regDate regDate,
+ 			a.updateDate updateDate,
+ 			a.galleryName galleryName,
+	 		a.startDate startDate,
+	 		a.endDate endDate,
+	 		a.likes likes,
+	 		a.views views,
+ 			m.nick writerName,
+ 			f.fileName fileName,
+ 		-- count(r.rno) replyCnt
+ 		-- sum(l.lno) likesCnt
+ 		
+ 		-- count reply
+ 				(SELECT COUNT(*) FROM a_reply r WHERE r.bno = a.bno) replyCnt,
+ 				
+ 		-- sum likes
+ 			(SELECT IFNULL(SUM(l.lno), 0) FROM a_likes l WHERE l.bno = a.bno) likesCnt
+ 		FROM a_board a 
+ 					-- LEFT JOIN a_reply r ON a.bno = r.bno
+ 						INNER JOIN member m ON a.writer = m.usermail
+ 						LEFT JOIN a_file f ON a.bno = f.bno
+ 					-- LEFT JOIN a_likes l ON a.bno = l.bno
  		where bno > 0
  		ORDER BY bno DESC
  		]]>
@@ -44,10 +72,23 @@
  			a.galleryName galleryName,
 	 		a.startDate startDate,
 	 		a.endDate endDate,
+	 		a.likes likes,
+	 		a.views views,
  			m.nick writerName,
- 			count(r.rno) replyCnt
- 		FROM a_board a LEFT JOIN a_reply r ON a.bno = r.bno
+ 			f.fileName fileName,
+ 		-- count(r.rno) replyCnt
+ 		-- sum(l.lno) likesCnt
+ 		
+ 		-- count reply
+ 				(SELECT COUNT(*) FROM a_reply r WHERE r.bno = a.bno) replyCnt,
+ 				
+ 		-- sum likes
+ 			(SELECT IFNULL(SUM(l.lno), 0) FROM a_likes l WHERE l.bno = a.bno) likesCnt
+ 		FROM a_board a 
+ 					-- LEFT JOIN a_reply r ON a.bno = r.bno
  						INNER JOIN member m ON a.writer = m.usermail
+ 						LEFT JOIN a_file f ON a.bno = f.bno
+ 					-- LEFT JOIN a_likes l ON a.bno = l.bno
  						
  		<include refid="criteria"></include>
  		GROUP BY a.bno
@@ -98,6 +139,7 @@
  	<update id="update">
  		UPDATE a_board
  		SET
+ 			 categorie = #{catagorie},
 	 		 region = #{region},
 	 		 title = #{title},
 	 		 content = #{content},
@@ -112,12 +154,18 @@
  	</update>
  
  	<select id="getTotalCount" resultType="int">
- 		SELECT COUNT (*) FROM a_board a
+ 		SELECT COUNT(*) FROM a_board a JOIN member m ON a.writer = m.usermail
  		<include refid="criteria"></include>
  	</select>
  	
  	<delete id="deleteByUsermail">
  		DELETE FROM a_board WHERE writer=#{usermail}
  	</delete>
+ 	
+ 	<update id="views">
+ 		UPDATE a_board 
+ 		SET views = views + 1
+ 		WHERE bno = #{bno}
+ 	</update>
  
  </mapper>

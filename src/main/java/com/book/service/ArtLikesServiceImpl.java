@@ -44,7 +44,7 @@ public class ArtLikesServiceImpl implements ArtLikesService {
 	}
 
 	@Override
-	public Long ClickAdd(String usermail, Long bno) {
+	public Long clickAdd(String usermail, Long bno) {
 		return mapper.clickAdd(usermail, bno);
 	}
 

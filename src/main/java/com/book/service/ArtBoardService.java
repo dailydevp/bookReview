@@ -24,4 +24,6 @@ public interface ArtBoardService {
 	public boolean modify(ArtBoardVO board, MultipartFile file);
 	
 	public boolean delete(Long bno);
+	
+	public int views(Long bno);
 }

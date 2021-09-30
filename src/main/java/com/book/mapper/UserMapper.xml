@@ -27,6 +27,7 @@
 			m.nick nick,
 			m.phoneNo phoneNo,
 			m.regdate regdate,
+			m.fileName fileName,
 			a.auth auth
 		FROM
 			member m LEFT JOIN auth a 
@@ -95,9 +96,10 @@
 		SET
 			fileName = #{fileName}
 		WHERE
-			sermail = #{usermail}
+			usermail = #{usermail}
 	</update>
   
+
   
   
   <resultMap type="com.book.domain.UserVO" id="userMapper">

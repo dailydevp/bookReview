@@ -108,7 +108,7 @@ public class BookBoardServiceImpl implements BookBoardSerive{
 			
 			PutObjectRequest objectRequest = PutObjectRequest.builder()
 					.bucket(bucketName)
-					.key(board.getBno()+ "/" + file.getOriginalFilename())
+					.key("book/" + board.getBno()+ "/" + file.getOriginalFilename())
 					.contentType(file.getContentType())
 					.acl(ObjectCannedACL.PUBLIC_READ)
 					.build();
@@ -164,7 +164,7 @@ public class BookBoardServiceImpl implements BookBoardSerive{
 	}
 
 	private void deleteFile(BookBoardVO vo) {
-		String key = vo.getBno() +"/"+vo.getFileName();
+		String key = "book/" + vo.getBno() +"/"+vo.getFileName();
 		
 		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
 				.bucket(bucketName)

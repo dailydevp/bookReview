@@ -159,24 +159,26 @@ $(function() {
 			  <div class="row justify-content-around row row-cols-3">
 			  	
 				    <div class="form-group col-4">
-				    	<h4>내 프로필</h4>
-				      <span class ="photo_form">
-						<img class="img-thumbnail" id="profile"
-							 <c:if test="${empty user.fileName }">
-					    	 	 src="${profile }basicProfile/basicImage.png"
-					    	  </c:if>
-							
-							<c:if test="${not empty users.fileName }">
-								src="${profile }${user.usermail }/${user.fileName }"
-							</c:if>
-						>
-						</span>
-	
 						<form id="memberInfo" method="post" action="${appRoot }/member/modify">
+				    	<h4>내 프로필</h4>
+				    	<div class="info_form">
+					      <span class ="photo_form">
+							<img id="profile"
+								 <c:if test="${empty users.fileName }">
+						    	 	 src="${profile }basicProfile/basicImage.png"
+						    	  </c:if>
+								
+								<c:if test="${not empty users.fileName }">
+									src="${profile }${users.usermail }/${users.fileName }"
+								</c:if>
+							>
+							</span>
+				    	</div>
+	
 	
 						<div class ="info_form">					
 							<label for="member-info-mail" id="label"><strong>이메일</strong></label>
-							<input readonly value="${pinfo.user.usermail}"type="email" class="form-control-plaintext" id="member-info-mail" name="usermail">
+							<input readonly value="${users.usermail}"type="email" class="form-control-plaintext" id="member-info-mail" name="usermail">
 						</div>
 						<div class ="info_form">
 							<label for="member-info-nick" id="label"><strong>닉네임</strong></label>
@@ -185,14 +187,15 @@ $(function() {
 						
 						<div class ="info_form">
 							<label for="member-info-phone" ><strong>연락처</strong></label>
-							<input readonly value="${pinfo.user.phoneNo }"type="text" class="form-control-plaintext" id="member-info-phone" name="phoneNo">
+							<input readonly value="${users.phoneNo }"type="text" class="form-control-plaintext" id="member-info-phone" name="phoneNo">
 						</div>	
 						
 						<div class ="info_form">
 							<label for="member-info-regdate" id="label"><strong>가입일</strong></label>
 							<input readonly value="${pinfo.user.regdate }" type="text" class="form-control-plaintext" id="member-info-regdate" name="regdate">
 						</div>		
-			
+						
+				
 						
 						<a class="btn btn-primary" href="${appRoot }/member/profileModify">정보 수정</a>
 						
@@ -205,6 +208,7 @@ $(function() {
 						</button>
 						
 						</form>
+						
 				
 				
 				

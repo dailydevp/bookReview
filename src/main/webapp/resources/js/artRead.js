@@ -6,7 +6,7 @@
 	function showModifyModal(rno){
 		$.ajax({
 			type : "get",
-			url : appRoot + "/replies/" + rno,
+			url : appRoot + "/artreplies/" + rno,
 			success : function (reply) {
 				$("#replyRno").val(reply.rno);
 				$("#replyer").val(reply.replyer);
@@ -60,7 +60,7 @@
 
 		$.ajax({
 			type : "get" ,
-			url : appRoot + "/replies/pages/" + boardBno,
+			url : appRoot + "/artreplies/pages/" + boardBno,
 			success :function(list){
 				console.log(list);
 				showReplyList(list);
@@ -87,7 +87,7 @@
 
 		$.ajax({
 			type : "post",
-			url : appRoot+"/replies/new",
+			url : appRoot+"/artreplies/new",
 			data : JSON.stringify(data),
 			contentType : "application/json",
 			success : function(){
@@ -122,7 +122,7 @@
 
 		$.ajax({
 			type : "put",
-			url : appRoot + "/replies/" + rno,
+			url : appRoot + "/artreplies/" + rno,
 			data : JSON.stringify(data),
 			contentType : "application/json",
 			success : function(){
@@ -156,7 +156,7 @@
 
 			$.ajax({
 				type : "delete",
-				url : appRoot + "/replies/" + rno,
+				url : appRoot + "/artreplies/" + rno,
         data : JSON.stringify(data),
         contentType : "application/json",
 				success : function(){
@@ -179,13 +179,13 @@
 		update(this);
 	});
 	
-	function update(elem){
+	function update(element){
 		// var root = getContextPath(),
-		var likeurl = "/booklikes/update";
+		var likeurl = "/artlikes/update";
 		// usermail = $('#usermail').val(),
-		var bno = $(elem).closest(".item").find(".list-num").text();
+		var bno = $(element).closest('tr').find('.listNo').text();
 		bno = bno ? bno : window.boardBno;
-		var count = $(elem).closest(".item").find('.likesCheck').val();
+		var count = $(element).closest(".item").find('.likesCheck').val();
 		var data = {"usermail" : usermail,
 				"bno" : bno,
 				"count" : count};

@@ -1,5 +1,7 @@
 package com.book.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.book.domain.UserVO;
@@ -26,5 +28,6 @@ public interface UserService {
 	boolean modifyInfo(UserVO user);
 	
 	boolean upload(String usermail, MultipartFile mfile);
+
 	
 }

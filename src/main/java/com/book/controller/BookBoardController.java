@@ -23,8 +23,10 @@ import com.book.domain.Criteria;
 import com.book.domain.PageDTO;
 import com.book.service.ArtBoardService;
 import com.book.service.BookBoardSerive;
+import com.book.service.BookLikesService;
 
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Controller
@@ -34,7 +36,16 @@ import lombok.extern.log4j.Log4j;
 public class BookBoardController {
 	
 
-	private BookBoardSerive service;
+	public BookBoardSerive service;
+	public BookLikesService lservice;
+	
+	@GetMapping("/map")
+	public void map() {
+		
+	}
+	
+
+	
 
 	
 	@GetMapping("/list")
@@ -49,13 +60,27 @@ public class BookBoardController {
 		model.addAttribute("pageMaker" , new PageDTO(cri, total));
 		
 		log.info(principal);
+		
+		if (principal != null) {
+			List<Long> likesList = lservice.getList(principal.getName());
+		
+			
+			log.info(likesList);
+			
+			
+			for (BookBoardVO vo : list) {
+				if(likesList.contains(vo.getBno())) {
+				log.info(vo);
+				vo.setClicked(true);
+			}
+		}
 	}
-	
+}	
 
 	@GetMapping("/write")
 	@PreAuthorize("isAuthenticated()")
 	public void write(@ModelAttribute("cri") Criteria cri) {
-		// forward /WEB-INF/views/board/register.jsp
+	
 		
 	}
 	
@@ -78,15 +103,26 @@ public class BookBoardController {
 	}
 	
 	@GetMapping({"/read","/modify"})
-	public void read(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void read(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model, Principal principal) {
 		log.info("board read! 읽기");
 		log.info(bno);
-		log.info(cri.getPageNo());
-		log.info(cri.getAmount());
+
 		
 		BookBoardVO vo = service.read(bno);
 		
+		log.info(principal);
+		
+		if(principal != null) {
+			Long Clicked = lservice.getLikeClick(principal.getName(), vo.getBno());
+			Long one = 1L;
+			if(one.equals(Clicked)) {
+				vo.setClicked(true);
+			}
+		}
+		
 		model.addAttribute("board", vo);
+		
+	//	service.views(bno);
 	}
 	
 
@@ -95,8 +131,7 @@ public class BookBoardController {
 	@PreAuthorize("principal.username == #board.writer")
 	public String modify(BookBoardVO board, Criteria cri, @RequestParam("file") MultipartFile file, RedirectAttributes rttr) {
 		log.info("board_수정페이지!");
-		log.info(cri.getPageNo());
-		log.info(cri.getAmount());
+
 		
 		boolean success = service.modify(board, file);
 		
@@ -119,6 +154,7 @@ public class BookBoardController {
 	@PreAuthorize("principal.username == #writer")
 	public String delete(@RequestParam("bno") Long bno, Criteria cri, RedirectAttributes rttr, String writer) {
 		log.info("board_삭제페이지!");
+		log.info("delete" + bno);
 		boolean success = service.delete(bno);
 		
 		if(success) {

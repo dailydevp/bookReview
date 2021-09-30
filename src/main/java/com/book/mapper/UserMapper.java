@@ -1,5 +1,7 @@
 package com.book.mapper;
 
+import java.util.List;
+
 import com.book.domain.AuthVO;
 import com.book.domain.FileDTO;
 import com.book.domain.UserVO;
@@ -25,4 +27,6 @@ public interface UserMapper {
 	public int upload(FileDTO file);
 	
 	public UserVO checkPw(String userpw);
+
+
 }

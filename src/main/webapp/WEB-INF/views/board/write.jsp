@@ -21,6 +21,7 @@ boder : solid 1px pink;
 
 #text{
 	resize: none;
+	border:none;
 }
 
 
@@ -50,7 +51,7 @@ $(function() {
 				$("#writeBtn").attr("action","${appRoot }/board/write").submit();					
 			}
 		
-	}
+			}
 		}) 
 		
 	})
@@ -71,10 +72,9 @@ $(function() {
 			
 					  <div class="form-group">
 					    <label for="categories"></label>
-					    <select class="form-control" id="categories" name ="categorie" style="width : 120px;">
-					    
-					      <option>BOOK</option>
-					      <option>ART</option>
+					    <select class="form-control" id="categories" name ="categorie" style="width : 120px;" onchange="window.open(value,'_blank');">    
+					      <option value="${appRoot }/board/write">BOOK</option>
+					      <option value="${appRoot }/art/write">ART</option>   
 					    </select>
 					  </div>
 			
@@ -95,7 +95,7 @@ $(function() {
 				<div class="board-container">
 					<div class="form-group">
 						<label for="text"></label>
-						<textarea id="text" class="form-control" name="content" rows="15" style="border:none;"></textarea>
+						<textarea id="text" class="form-control" name="content" rows="15" ></textarea>
 					</div>
 					<div class="form-group">
 						<label for="file">파일</label>

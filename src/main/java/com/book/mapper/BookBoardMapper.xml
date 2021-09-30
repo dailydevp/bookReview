@@ -36,7 +36,7 @@
  			b.likes likes,
  			f.fileName fileName,
  			m.nick writerName,
- 		--	count (r.bno) replyCnt,
+ 		--	count(r.bno) replyCnt,
  		--	sum(l.lno) likesCnt
  		
  		--	count reply
@@ -65,6 +65,7 @@
  			b.regDate regDate,
  			b.updateDate updateDate,
  			b.views views,
+ 			b.likes likes,
  			m.nick writerName,
  			f.fileName fileName,
  		-- count(r.rno) replyCnt,
@@ -90,16 +91,16 @@
  	
  	<insert id = "insert">
  	INSERT INTO b_board
- 	(categorie, title, content, writer)
+ 	(categorie, title, content, writer, views)
  	VALUES
- 	(#{categorie}, #{title},#{content},#{writer})
+ 	(#{categorie}, #{title},#{content},#{writer}, #{views})
  	</insert>
  	
  	<insert id="insertSelectKey" useGeneratedKeys="true" keyProperty="bno" keyColumn="bno">
  		INSERT INTO b_board
- 		(categorie,title, content, writer)
+ 		(categorie,title, content, writer, views)
  		VALUES
- 		(#{categorie}, #{title},#{content},#{writer})
+ 		(#{categorie}, #{title},#{content},#{writer}, #{views})
  	</insert>
  	
  	<select id="read" resultType="com.book.domain.BookBoardVO">
@@ -137,9 +138,8 @@
  	</update>
  	
  	<select id="getTotalCount" resultType="int">
- 		SELECT 
- 		COUNT (*)
- 		FROM b_board b
+ 		SELECT COUNT(*) FROM b_board b
+ 	
  	<include refid="criteria"></include>
  	</select>
  	
@@ -148,4 +148,13 @@
  		FROM b_board
  		WHERE writer=#{usermail}
  	</delete>
+ 	
+ 	<update id="views">
+ 		UPDATE
+ 			b_board
+ 		SET
+ 			views = views + 1
+ 		WHERE
+ 			bno = #{bno}
+ 	</update>
  </mapper>

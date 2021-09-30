@@ -7,9 +7,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+
+img {
+	width : 300px;
+	}
+	
+	
+#text{
+	resize: none;
+	border:none;
+	}
+	
+*:focus {
+    outline: none;
+    }
+	
+</style>
 
 
-<title> 수정 / 삭제 </title>
+<title> 수정 </title>
 </head>
 <body>
 <na:navbar></na:navbar>
@@ -28,7 +45,8 @@
 					
 					<div class="form-group">
 						<label for="writer"></label>
-						<input id="writer" class="form-control" type="hidden" name="writer" value="${pinfo.user.usermail }" >
+						<input id="writer" class="form-control" type="hidden" name="writer" value="${board.writer }" >
+					
 					</div>
 				
 				
@@ -44,9 +62,7 @@
 				
 					<div class="form-group">
 						<label for="text"></label>
-						<textarea id="text" class="form-control" name="content" rows="15" style="border:none;  outline: none;">
-						<c:out value="${board.content }"/>
-						</textarea>
+						<textarea id="text" class="form-control" name="content" rows="15"> <c:out value="${board.content }"/></textarea>
 					</div>
 					<div class="form-group">
 						<label for="file">파일</label>
@@ -72,7 +88,7 @@
 					
 					
 					<input class="btn btn-warning" type="submit" value="수정">
-					<input class="btn btn-danger" id="deleteBtn" type="button" value="삭제">
+					
 					</form>
 					</div>	
 				</div>

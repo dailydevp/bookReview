@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/subModules/bootstrapHeader.jsp" %>
 <%@ taglib prefix="na" tagdir="/WEB-INF/tags" %>
 
@@ -11,11 +12,21 @@
 
 <title>ART LIST</title>
 <na:navbar></na:navbar>
+<script src="${appRoot }/resources/js/artRead.js"></script>
+<script>
+	var appRoot = "${appRoot}";
+	var usermail = "${pinfo.user.usermail}";
+	var bno = "${artboard.bno }";
+/* var fileName = "${artboard.fileName}";
+var fileName2 = "${board.fileName}";
+var bno = "${artboard.bno}";
+var bno2 = "${board.bno}"; */
 
-<script type="text/javascript">
+
+	 
 $(function() {
-	
-	$("#list-pagenation a").click(function (e) {
+		
+	$("#listPagination a").click(function (e) {
 		e.preventDefault();
 		
 		console.log("a요소 클릭됨");
@@ -37,15 +48,41 @@ $(function () {
 })
 
 </script>
+<style>
+img{
+	width : 240px;
+}
+
+li{
+ 	border-bottom: 1px solid #dbdbdb;
+ 	margin-bottom: 20px;
+ 	list-style : none;
+ 
+}
+
+ td.title{
+ 	color : black;
+ 	padding-top: 40px;
+
+}
+
+td.viewInfo {
+	padding-top: 120px;
+
+}
+
+
+
+</style>
 </head>
 <body>
 <div class="container">
-		<a href="${appRoot }/art/write">글작성!</a>
+		
 	<table class="table table-hover">
 		<div class="artboardList">
 			<ul class="clearfix"> 
 			  	<c:forEach items = "${list }" var = "artboard">
-			  		<li class="items">
+			  		<li class="item">
 			  				<c:url value="/art/read" var="readUrl">
 			  					<c:param name="bno" value="${artboard.bno }"/>
 			  					<c:param name="pageNo" value="${pageMaker.cri.pageNo }" />
@@ -53,63 +90,66 @@ $(function () {
 			  					<c:param name="type" value="${pageMaker.cri.type }" />
 			  					<c:param name="keyword" value="${pageMaker.cri.keyword }" />
 			  				</c:url>
+				  			
+			  				<tr>
+			  				<td><a class="image"  href="${readUrl }">
+			  					<img src="${imgRoot }art/${artboard.bno}/${artboard.fileName}">
+			  				</a></td>
+			  			
+			  						<td class="title">		
+			  									
+			  					 	<span class="listNo" hidden>${artboard.bno }</span>
+			  									
+			  						<h1>${artboard.title }</h1>
+			  						<br>		  					
+			  						<h4>${artboard.galleryName }	</h4>		  					
+			  						<br>
+			  						<fmt:formatDate value="${artboard.startDate  }" pattern="yyyy-MM-dd"/>
+			  						~<fmt:formatDate value="${artboard.endDate  }" pattern="yyyy-MM-dd"/></td>
 			  				
 			  			
-			  				
-			  				<a class="image" href="${readUrl }">
-			  					<img src="${imgRoot }${artboard.bno}/${artboard.fileName}">
-			  				</a>
-			  					<a class="title" href="${readUrl }">
-			  						<span class="title">${artboard.title }</span>
-			  					</a>
+			  					<td class="viewInfo">
 			  					
-			  					<a class="contents" href="${readUrl }">
-			  						<span class="galleryName">${artboard.galleryName }</span>
-			  						<span class="openingPeriod">${artboard.period }</span>
-			  					</a>
-			  					
-			  				<div class="writer">${artboard.writerName }</div>
-			  					<div class="viewInfo">
-			  						<div class="reply">
 			  							<i class="far fa-comment-dots"></i>&nbsp;${artboard.replyCnt }
-			  						</div>
-			  						<div class="view">
-										<i class="far fa-eye"></i>&nbsp;${artboard.viewCnt }
-									</div>
-						
-								<c:choose>
-									<c:when test="${!artboard.likeClicked }">
-										<span class="likeBtn">
-											<i class="far fa-heart" type="button"></i>
-										</span>
-											<input type="hidden" class="likeCheck" value="${likeNo }">
-									</c:when>
+			  						&nbsp;
+										<i class="far fa-eye"></i>&nbsp;${artboard.views }
+									&nbsp;
+					<c:choose>
+						<c:when test="${!artboard.likeClicked}">
+						<span class="likesBtn">
+							<i type="button" class="far fa-heart"></i>
+						</span>
+							<input type="hidden" class="likesCheck" value="${lno }">
+						</c:when>					
+						<c:when test="${artboard.likeClicked}">
+						<span class="likesBtn">
+							<i type="button" class="fas fa-heart"></i>
+						</span>
+							<input type="hidden" class="likesCheck" value="${lno }">
+						</c:when>	
+						<c:otherwise>
+							0도 아니고 1도 아님.
+						</c:otherwise>
+					</c:choose>  ${artboard.likesCnt }
+									</td>
 									
-									<c:when test="${artboard.likeClicked }">
-										<span class="likeBtn">
-											<i class="fas fa-heart" type="button"></i>
-										</span>
-											<input type="hidden" class="likeCheck" value="${likeNo }">
-									</c:when>
-									<c:otherwise>
-										이건 왜 넣은겨 ...?
-									</c:otherwise>
-								</c:choose> ${artboard.likeCnt }
-								
-			  					</div>
+							
+						
+			  				</tr>
+
 			  			
-			  			<div class="registerDate">			  		
+			  		<%-- 	<div class="registerDate">			  		
 			  				<fmt:formatDate value="${artboard.regDate }" pattern="yyyy-MM-dd"/>
-			  			</div>
-			  		</li>
+			  			</div> --%>
 			  	</c:forEach>		
+			  		</li>
 			</ul>
 		</div>
 	</table>
 		
 		<!-- Pagination  -->
 		<nav aria-label="Page navigation example">
-		  <ul id="list_pagination" class="pagination justify-content-center">
+		  <ul id="listPagination" class="pagination justify-content-center">
 		  
 		  <c:if test="${pageMaker.prev }">
 		    <li class="page-item">
@@ -133,8 +173,8 @@ $(function () {
 			 
 			<%-- 페이지 링크용 Form --%>
 			<div style="display: none;">
-				<form id="actionForm" action="${appRoot }/board/artlist" method="get">
-					<input name="pageNum" value="${cri.pageNo }" />
+				<form id="actionForm" action="${appRoot }/art/list" method="get">
+					<input name="pageNo" value="${cri.pageNo }" />
 					<input name="amount" value="${cri.amount }" />
 					<input name="type" value="${cri.type }" />
 					<input name="keyword" value="${cri.keyword }" />

@@ -34,10 +34,17 @@
  	</update>
  	
  	<select id="getList" resultType="Long">
+ 		SELECT bno
+ 		FROM b_likes
+ 		WHERE usermail = #{usermail}
+ 			AND lno = 1
+ 	</select>
+ 	
+ 	<select id="getLikeClick" resultType="Long">
  		SELECT lno
  		FROM b_likes
  		WHERE usermail = #{usermail}
- 			AND bno = #{bno}
+ 		AND bno = #{bno}
  	</select>
  
  </mapper>

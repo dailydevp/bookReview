@@ -72,11 +72,10 @@ $(function() {
 				
 					  <div class="form-group">
 					    <label for="categories"></label>
-					    <select class="form-control" id="categories" name ="categorie" style="width : 120px;">
-					    
-					      <option>BOOK</option>
-					      <option>ART</option>
-					    </select>
+					      <select class="form-control" id="categories" name ="categorie" style="width : 120px;" onchange="window.open(value,'_blank');">    
+					      	<option value="${appRoot }/art/write">ART</option>   
+					      	<option value="${appRoot }/board/write">BOOK</option>
+					      </select>
 					  </div>
 					  <div class="form-group">
 					    <label for="region"></label>
@@ -101,8 +100,8 @@ $(function() {
 				</div>
 				
 					<div class="form-group">
-						<label for="gellry"></label>
-						<input id="address" class="form-control" name="galleryName" placeholder="갤러리">
+						<label for="gallery"></label>
+						<input id="gallery" class="form-control" name="galleryName" placeholder="갤러리">
 					</div>
 				
 					<div class="form-group">

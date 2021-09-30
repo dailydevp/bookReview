@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/subModules/bootstrapHeader.jsp" %>
 <%@ taglib prefix="na" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
@@ -10,16 +11,19 @@
 <script src="${appRoot }/resources/js/read.js"></script> 
 
 <script>
-
+var appRoot = "${appRoot}";
 var boardBno = "${board.bno}";
 var usermail = "${pinfo.user.usermail}";
+var fileName = "${users.fileName}";
+var file =  "${pinfo.user.fileName}";
 </script>
 
 <style>
 
 a{
-	padding : 10px;
+	padding-top : 17px;
 	color : #050A30;
+
 }
 
 span{
@@ -29,14 +33,6 @@ span{
     margin-top:10px;
    
 
-}
-.img-thumbnail {
-	height : 50px;
-	width : 50px;
-	border-radius: 70%;
-	display: flex;
-	float : left;
-	vertical-align:middle;
 }
 
 .replyZone{
@@ -63,6 +59,28 @@ img {
 	width : 300px;
 }
 
+#likes{
+	position : relative;
+	padding : 2px 0px;
+	margin-bottom: 120px;
+}
+
+#profile {
+	margin-top : 10px;
+	height : 40px;
+	width : 40px;
+	border-radius: 70%;
+	float : left;
+
+
+}
+
+#delete{
+	color : red;
+	border-color: transparent;
+	background-color: white;
+}
+
 
 #title{
 	font-size: 40px;
@@ -80,14 +98,33 @@ img {
 	resize: none;
 }
 
+#replyNick{
+	background-color: white;
+	border : none;
+}
+
+#replyTextModify{
+	resize: none;
+	}
 *:focus {
     outline: none;
     }
 </style>
-<script type="text/javascript">
-var appRoot = "${appRoot}";
-var boardBno = "${board.bno}";
+<script>
+$(document).ready(function deleteCheck() {
+	$("#delete").click(function() {
+		var deleteUrl = "${appRoot}/board/delete";
+		var readUrl = "${appRoot}/board/read";
+		var msg = confirm("글을 삭제하시겠슴둥...?");
+		if(msg == true){
+			$("#readForm").attr("action", deleteUrl).submit();
+		}else{
+			return;
+		}
+	})
+})
 </script>
+
 <title>Book List</title>
 <na:navbar></na:navbar>
 </head>
@@ -97,6 +134,8 @@ var boardBno = "${board.bno}";
 	<div class="readContent">
 		<div class="read-header">
 				<div class="title_form">
+				<form id="readForm" action="${appRoot }/board/read" method="post" enctype="multipart/form-data">
+					<input hidden name="bno" value="${board.bno }">
 					<div class="header-info">
 						<label for="title"></label>
 						<input id="title" class="form-control-plaintext" name="title" value="${board.title }" readonly>
@@ -104,8 +143,12 @@ var boardBno = "${board.bno}";
 						<div class="form-group">
 							<div class="articleInfo">
 								<div class="writerInfo">
-									<span class="profile">
-										<img src="${appRoot }/resources/images/cookie.JPG" class="img-thumbnail" >
+									
+											<c:if test="${not empty pinfo.user.fileName }">
+												<div>
+													<img id="profile" src="${profile}${pinfo.user.usermail }/${pinfo.user.fileName}">
+												</div>
+											</c:if>
 								
 									
 									<input type = "hidden" id="writer" class="form-control-plaintext" name="writer" value="${board.writer }" readonly>	
@@ -125,14 +168,25 @@ var boardBno = "${board.bno}";
 								  					<c:param name="type" value="${cri.type }"/>
 													<c:param name="keyword" value="${cri.keyword }" />		
 												</c:url>
+												
+												<c:url value="/board/delete" var="deleteUrl">
+													<c:param name="bno" value="${board.bno }"/>
+								  					<c:param name="pageNo" value="${cri.pageNo }" />
+								  					<c:param name="amount" value="${cri.amount }" />
+								  					<c:param name="type" value="${cri.type }"/>
+													<c:param name="keyword" value="${cri.keyword }" />		
+												</c:url>
+												
+												
 											
 												<c:if test="${pinfo.user.usermail eq board.writer }" >
-													<a href="${modifyUrl }">수정</a>
-													<a href="${appRoot }/board/delete">삭제</a>
+													<a href="${modifyUrl }">수정</a> |
+													<input type="submit" id="delete" onclick="deleteCheck()" value="삭제" >
 												</c:if>
 											</ul>
 										</span>																				
 									</span>						
+				</form>
 								</div>
 							</div>							
 						</div>		
@@ -143,36 +197,57 @@ var boardBno = "${board.bno}";
 				<hr>
 				
 		
-			
-			<div class="writerInfo">
 				<div class="photoZone">
 					<c:if test="${not empty board.fileName }">
 						<div class="photoInfo">
 							<img class="img-fluid"
-							src ="${imgRoot}${board.bno }/${board.fileName }">
+							src ="${imgRoot}book/${board.bno }/${board.fileName }">
 						</div>
 					</c:if>
+				</div>
+			<div class="writerInfo">
+					
 					
 			<div class="form-group">
 				<label for="text"> </label>
-				<textarea id="text" class="form-control-plaintext" name="content" readonly> <c:out value="${board.content }"/> </textarea>
+				<textarea id="text" class="form-control-plaintext" name="content" rows="15" readonly> <c:out value="${board.content }"/> </textarea>
 			</div>
 		
 		
-			<div class="replyZone">					
-				<a><i class="far fa-comment"></i>댓글<strong>${board.replyCnt }</strong></a>
-	
-				<a><i class="far fa-heart"></i>좋아요 <strong>${board.likes }</strong></a>							
+			<div class="replyZone">		
+			
+					
+				<a><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong></a>
+			
+				<a id="likes">
+					<c:choose>
+						<c:when test="${!bboard.Clicked}">
+						<span class="likesBtn">
+							<i type="button" class="far fa-heart"></i>
+						</span>
+							<input type="hidden" class="likesCheck" value="${lno }">
+						</c:when>					
+						<c:when test="${bboard.Clicked}">
+						<span class="likesBtn">
+							<i type="button" class="fas fa-heart"></i>
+						</span>
+							<input type="hidden" class="likesCheck" value="${lno }">
+						</c:when>					
+					</c:choose>
+				좋아요&nbsp;<strong>${board.likes }</strong></a>		
 			</div>
 		
+				
+			</div>
 		
+			<br>
 			<hr>
 		
 			<h5>댓글</h5>
 				
 			<div class="reply-container">
 				<div class="form-group">	
-					<input type="text"  id="replyBno" value="${board.bno }" hidden>	
+					<input type="text" value="${board.bno }" hidden>	
 								
 				      <div class="form-group" hidden>
 			            <label for="recipient-name" class="col-form-label">작성자</label>

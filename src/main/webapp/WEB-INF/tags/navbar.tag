@@ -20,7 +20,7 @@
 
 	<ul class="navbar-nav ml-auto">
 	 <li class="nav-item dropdown">	
-	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" style=""role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"  style=""role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	          <i class="fas fa-bars"></i>
 	        </a>
 	        <div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdown" >
@@ -46,17 +46,14 @@
 	        </div>
 	      </li>
 	      
-	        <form action="${listUrl }" method="get" class="d-flex">
+	        <form class="d-flex">
 	        	<select name="type"  class="form-control mr-sm-2">
 	        		<option value=""></option> 
 	        		<option value="T" ${cri.type == "T" ? 'selected' : '' }>제목</option>
-			  		<option value="C" ${cri.type == "C" ? 'selected' : '' }>내용</option>
-			  		<option value="W" ${cri.type == "W" ? 'selected' : '' }>작성자</option>
+  					<option value="C" ${cri.type == "C" ? 'selected' : '' }>내용</option>
+  					<option value="W" ${cri.type == "W" ? 'selected' : '' }>작성자</option>
 	        	</select>
-			      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="${cri.keyword } ">
-			      
-			       <input type="hidden" name="pageNo" value="1">
-  				  <input type="hidden" name="amount" value="${cri.amount }">
+			      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="${cri.keyword }">
 			      <button class="btn btn-outline-success" type="submit">Search</button>
 		    </form>
 	</ul>

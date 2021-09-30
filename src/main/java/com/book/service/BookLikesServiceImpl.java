@@ -16,25 +16,25 @@ public class BookLikesServiceImpl implements BookLikesService{
 	@Setter(onMethod_=@Autowired)
 	public BookLikesMapper mapper;
 
-	@Override
+//	@Override
 	public int likescount(BookLikesVO vo) {
 		return mapper.likescount(vo);
 	}
 
-	@Override
+//	@Override
 	public int getInfo(BookLikesVO vo) {
 		return mapper.getInfo(vo);
 	}
 
-	@Override
+//	@Override
 	public void insert(BookLikesVO vo) {
 		mapper.insert(vo);
 		
 	}
 
-	@Override
+//	@Override
 	public void update(BookLikesVO vo) {
-		if(mapper.update(vo)==0) {
+		if(mapper.update(vo) == 0) {
 			mapper.insert(vo);
 		}
 		

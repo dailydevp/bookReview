@@ -1,6 +1,7 @@
 package com.book.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.book.domain.Criteria;
@@ -197,6 +200,18 @@ public class MemberController {
 	@GetMapping("/findpw")
 	public void findpw() {
 		
+	}
+
+	@PostMapping("/profileUpload")
+	@PreAuthorize("principal.username == #usermail")
+	public String profileUpload(String usermail, @RequestParam("file") MultipartFile profile) {
+		log.info("프로필 사진명 :" + profile.getOriginalFilename());
+		
+		service.upload(usermail, profile);
+		
+		log.info(profile);
+		
+		return "redirect:/member/myinfo";
 	}
 	
 	

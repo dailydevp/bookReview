@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/subModules/bootstrapHeader.jsp" %>
 <%@ taglib prefix="na" tagdir="/WEB-INF/tags" %>
 
@@ -14,6 +15,10 @@
 <na:navbar></na:navbar>
 
 <script type="text/javascript">
+var appRoot = "${appRoot}";
+var usermail = "${pinfo.user.usermail}";
+
+
 $(function() {
 	
 	$("#list_pagenation a").click(function (e) {
@@ -38,6 +43,7 @@ $(function () {
 })
 
 </script>
+<script src="${appRoot }/resources/js/read.js"></script> 
 </head>
 <body>
 <!-- 
@@ -48,7 +54,7 @@ $(function () {
 		  <thead>
 		    <tr>
 		      <th scope="col" style="width : 50px;">#</th>
-		      <th scope="col">카테고리</th>
+		   
 		      <th scope="col">책제목</th>
 		      <th scope="col">작성자</th>
 		      <th scope="col" style="width : 240px;">작성일</th>	
@@ -61,7 +67,7 @@ $(function () {
 		  	<c:forEach items = "${list }" var = "board">
 		  		<tr>
 		  			<td>${board.bno }</td>
-		  			<td>${board.categorie }</td>
+		  		
 		  			<td>
 		  				<c:url value="/board/read" var="readUrl">
 		  					<c:param name="bno" value="${board.bno }"/>
@@ -81,7 +87,34 @@ $(function () {
 		  				<fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd"/>
 		  			</td>
 		  			<td>${board.views }</td>
-		  			<td>${board.likesCnt }</td>
+		  		
+		  			<td>${board.likesCnt }
+	<%-- 	  			
+		  								<c:choose>
+						<c:when test="${!bboard.Clicked}">
+						<span class="likesBtn">
+							<i type="button" class="far fa-heart"></i>
+						</span>
+							<input type="hidden" class="likesCheck" value="${lno }">
+						</c:when>					
+						<c:when test="${bboard.Clicked}">
+						<span class="likesBtn">
+							<i type="button" class="fas fa-heart"></i>
+						</span>
+							<input type="hidden" class="likesCheck" value="${lno }">
+						</c:when>	
+						<c:otherwise>
+							0도 아니고 1도 아님.
+						</c:otherwise>
+					</c:choose>  ${board.likesCnt }
+					 --%>
+		  			</td>
+		  			
+		  			
+		  			
+	
+		  			
+		  			
 		  		</tr>
 		  	</c:forEach>
 		  </tbody>
@@ -95,14 +128,13 @@ $(function () {
 		  
 		  <c:if test="${pageMaker.prev }">
 		    <li class="page-item">
-		    	<a class="page-link" href="${pageMaker.starPage - 1 }">Previous</a>
+		    	<a class="page-link" href="${pageMaker.prev - 1 }">Previous</a>
 		    </li>
 		  </c:if>
 		  
-		  <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var = "num">
+		  <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="num">
 		    <li class="page-item ${num == cri.pageNo ? 'active' : '' }">
-		    	<a class="page-link" href="${num }">${num }</a>
-		    </li>	  
+		    	<a class="page-link" href="${num }">${num }</a></li>	  
 		  </c:forEach>
 		  
 		  	<c:if test="${pageMaker.next }">

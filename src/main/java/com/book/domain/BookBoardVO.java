@@ -19,6 +19,9 @@ public class BookBoardVO {
 	private int likes;
 	private int views;
 	
+
+	private boolean Clicked;
+	
 	private int replyCnt;
 	private int likesCnt;
 	

@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class ArtBoardController {
 	
-	private ArtBoardService service;
+	public ArtBoardService service;
 	public ArtLikesService lservice;
 	
 	@RequestMapping("/list")
@@ -77,7 +77,7 @@ public class ArtBoardController {
 		
 		rttr.addFlashAttribute("result", board.getBno());
 		rttr.addFlashAttribute("messageTitle", "등록 성공!");
-		rttr.addFlashAttribute("messageBody", board.getBno() + "번 게시물 등록 되었슴둥.");
+		rttr.addFlashAttribute("messageBody", board.getBno() + "번 게시물 등록 되었습니다.");
 		
 		return "redirect:/art/list";
 		
@@ -89,8 +89,7 @@ public class ArtBoardController {
 		log.info("artboard read! 읽기");
 		
 		ArtBoardVO vo = service.read(bno);
-		
-	//	model.addAttribute("board", vo);
+
 		
 		//좋아요
 		if (principal != null) {
@@ -98,6 +97,7 @@ public class ArtBoardController {
 			Long one = 1L;
 			if (one.equals(likeClicked)) {
 				vo.setLikeClicked(true);
+				log.info(vo);
 			}
 		}
 		

@@ -8,6 +8,7 @@
 
 <%@ include file="/WEB-INF/subModules/bootstrapHeader.jsp" %>
 
+
 <title>회원 목록</title>
 <na:navbar></na:navbar>
 </head>
@@ -19,7 +20,7 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">이메일아이디</th>
+      <th scope="col">아이디</th>
       <th scope="col">닉네임</th>
       <th scope="col">연락처</th>
       <th scope="col">가입일</th>
@@ -28,16 +29,16 @@
     </tr>
   </thead>
   <tbody>
-  	<c:forEach items="${lists }" var = "member" varStatus ="status">
+  	<c:forEach items="${list }" var = "member" varStatus ="status" >	
 	    <tr>
-	      <td>${auth.DivNo}</td>
+	      <td>${status.count}</td>
 	      <td>${member.usermail }</td>
 	      <td>${member.nick }</td>
 	      <td>${member.phoneNo }</td>
-	      <td>${member.regDate }</td>
-	      <td>${auth.auth }</td>
+	      <td>${member.regdate }</td>
+	      <td>${auth.auth }</td> 
 	    </tr>
-	</c:forEach>
+	</c:forEach> 
   </tbody>
 </table>
 

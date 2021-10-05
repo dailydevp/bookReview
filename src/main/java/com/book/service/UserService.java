@@ -28,6 +28,8 @@ public interface UserService {
 	boolean modifyInfo(UserVO user);
 	
 	boolean upload(String usermail, MultipartFile mfile);
+	
+	public List<UserVO> list();
 
 	
 }

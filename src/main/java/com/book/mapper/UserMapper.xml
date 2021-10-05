@@ -19,6 +19,18 @@
   	(#{usermail}, #{auth})
   </insert>
   
+  <select id="list" resultMap="userMapper">
+  	SELECT
+  		m.usermail usermail,
+  		m.nick nick,
+  		m.phoneNo phoneNo,
+  		m.regdate regdate,
+  		a.auth auth
+  	FROM
+  		member m LEFT JOIN auth a
+  		ON m.usermail = a.usermail
+  	ORDER BY usermail;
+  </select>
   
   	<select id="read" resultMap="userMapper">
 		SELECT

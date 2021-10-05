@@ -28,5 +28,7 @@ public interface UserMapper {
 	
 	public UserVO checkPw(String userpw);
 
+	public List<UserVO> list();
+
 
 }

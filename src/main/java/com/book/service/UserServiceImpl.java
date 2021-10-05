@@ -193,5 +193,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 
+	@Override
+	public List<UserVO> list() {
+		return mapper.list();
+	}
+
+
 
 }

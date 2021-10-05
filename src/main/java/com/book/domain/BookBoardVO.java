@@ -20,11 +20,13 @@ public class BookBoardVO {
 	private int views;
 	
 
-	private boolean Clicked;
+	private boolean clicked;
 	
 	private int replyCnt;
 	private int likesCnt;
 	
 	private String fileName;
+
+
 
 }

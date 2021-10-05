@@ -14,8 +14,11 @@
 var appRoot = "${appRoot}";
 var boardBno = "${board.bno}";
 var usermail = "${pinfo.user.usermail}";
-var fileName = "${users.fileName}";
 var file =  "${pinfo.user.fileName}";
+var likes = "${board.likesCnt }";
+var boardlike = "${board.likes }";
+var boardlike2 = "${board.likesCnt }";
+var bb = "${board.views }";
 </script>
 
 <style>
@@ -216,25 +219,25 @@ $(document).ready(function deleteCheck() {
 		
 			<div class="replyZone">		
 			
-					
-				<a><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong></a>
+			<div class="views">kk ${board.views }</div>		
+				<div class="replys"><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong></div>
 			
-				<a id="likes">
+				<div id="likes">
 					<c:choose>
-						<c:when test="${!bboard.Clicked}">
+						<c:when test="${!board.clicked}">
 						<span class="likesBtn">
 							<i type="button" class="far fa-heart"></i>
 						</span>
 							<input type="hidden" class="likesCheck" value="${lno }">
 						</c:when>					
-						<c:when test="${bboard.Clicked}">
+						<c:when test="${board.clicked}">
 						<span class="likesBtn">
 							<i type="button" class="fas fa-heart"></i>
 						</span>
 							<input type="hidden" class="likesCheck" value="${lno }">
 						</c:when>					
 					</c:choose>
-				좋아요&nbsp;<strong>${board.likes }</strong></a>		
+				좋아요&nbsp;<strong>${board.likesCnt }</strong></div>		
 			</div>
 		
 				

@@ -71,7 +71,43 @@ td.viewInfo {
 
 }
 
+.box{
+	justify-content: center;
+	height: 30px;
+	display: flex;
+	cursor: pointer;
+	padding: 20px;
+	background: #fff;
+	border-radius: 30px;
+	align-items: center;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
 
+.box:hover input{
+	margin-top: 15px;
+	width: 100px;
+}
+
+.box input {
+	width: 0;
+	outline: none;
+	border: none;
+	font-weight: 500;
+	transition : 0.8s;
+	background: transparent;
+}
+
+.box button .fas {
+	color: #1daf;
+	font-size: 18px;
+}
+
+#search{
+	margin-top: 15px;
+	outline: none;
+	border: none;
+	background: transparent;
+}
 
 </style>
 </head>

@@ -46,16 +46,22 @@
 	        </div>
 	      </li>
 	      
+	      <div class="box">
 	        <form class="d-flex">
-	        	<select name="type"  class="form-control mr-sm-2">
-	        		<option value=""></option> 
+	        	<select name="type" hidden class="form-control mr-sm-2">
 	        		<option value="T" ${cri.type == "T" ? 'selected' : '' }>제목</option>
   					<option value="C" ${cri.type == "C" ? 'selected' : '' }>내용</option>
   					<option value="W" ${cri.type == "W" ? 'selected' : '' }>작성자</option>
 	        	</select>
-			      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="${cri.keyword }">
+			   <%--    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="${cri.keyword }">
 			      <button class="btn btn-outline-success" type="submit">Search</button>
+			    --%>
+			   	  <input type="search" placeholder="Search" name="keyword" value="${cri.keyword }">
+			   	  <a>
+			   	  	<button id ="search" type="submit"><i class="fas fa-search" ></i></button>
+			   	  </a>			   	  
 		    </form>
+	      </div>
 	</ul>
 </nav>
 

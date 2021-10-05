@@ -407,7 +407,7 @@ window.onload = function() {
 }
 </script>
 
- <!-- Load the JS SDK asynchronously -->
+ <!-- Load the JS SDK asynchronously
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script>
                var checkLoginStatus = function(response){
@@ -437,6 +437,7 @@ window.onload = function() {
 
         };
 
+  -->
 
  
     </script>
@@ -454,6 +455,7 @@ window.onload = function() {
 		</script>	
 	</c:if>
 	
+	<!--  
 	        <input type="button" id="authBtn" value="checking...." onclick="
         
         if(this.value === 'Login'){
@@ -470,6 +472,7 @@ window.onload = function() {
               });
              }
           ">
+	-->
 	
 	
 	
@@ -504,7 +507,7 @@ window.onload = function() {
 			<span>or use your account</span>
 			<input type="email" id="mailBtn" name="username" required="required" placeholder="Email" />
 			<input type="password" id="passwordBtn" name="password" required="required"placeholder="Password" />
-			<a href="#">Forgot your password?</a>
+			<a href="${appRoot }/member/findpw">Forgot your password?</a>
 			<button type="submit" name="button" id="signinBtn">Sign In</button>
 		</form>
 	</div>

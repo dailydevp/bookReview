@@ -97,8 +97,8 @@
 				//댓글 리스트 가져오고
 				getReplyList();
 				// 안내 메세지보여주기
-		//		alert("새 댓글을 입력하였습니다.");
-				$("#alert1").text("새 댓글 입력하였습니다.").addClass("show");
+				alert("새 댓글을 입력하였습니다.");
+				//$("#alert1").text("새 댓글 입력하였습니다.").addClass("show");
 			},
 			error : function(){
 				console.log("입력 실패");
@@ -132,7 +132,8 @@
 				//댓글 리스트 가져오고
 				getReplyList();
 				// 안내 메세지보여주기
-				$("#alert1").text("댓글 수정하였습니다.").addClass("show");
+				//$("#alert1").text("댓글 수정하였습니다.").addClass("show");
+				alert("댓글 수정하였습니다.");
 			},
 			error : function() {
 				console.log("수정 실패");
@@ -165,7 +166,8 @@
 					//댓글 리스트 다시 얻어오고
 					getReplyList();
 					//alert 띄우고
-					$("#alert1").text("삭제에 성공했습니다.").addClass("show");
+					alert("삭제에 성공했습니다.");
+					
 				},
 				error : function(){
 					console.log("삭제 실패");
@@ -183,7 +185,7 @@
 		// var root = getContextPath(),
 		var likeurl = "/booklikes/update";
 		// usermail = $('#usermail').val(),
-		var bno = $(elem).closest(".item").find(".list-num").text();
+		var bno = $(elem).closest(".tr").find(".list-num").text();
 		bno = bno ? bno : window.boardBno;
 		var count = $(elem).closest(".item").find('.likesCheck').val();
 		var data = {"usermail" : usermail,

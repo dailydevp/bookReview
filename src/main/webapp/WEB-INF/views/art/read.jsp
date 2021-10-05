@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/subModules/bootstrapHeader.jsp" %>
 <%@ taglib prefix="na" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
@@ -21,6 +22,7 @@ var boardBno = "${board.bno}";
 var usermail = "${pinfo.user.usermail}";
 var fileName = "${users.fileName}";
 var file =  "${pinfo.user.fileName}";
+
 </script>
 			
 
@@ -238,9 +240,9 @@ img {
 			<div class="replyZone">		
 			
 					
-				<a><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong><c:out value="${board.replyCnt }" /></strong></a>
+				<i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong><c:out value="${board.replyCnt }" /></strong>
 			
-				<a id="likes">
+				<span id="likes">
 					<c:choose>
 						<c:when test="${!board.likeClicked}">
 						<span class="likesBtn">
@@ -255,7 +257,7 @@ img {
 							<input type="hidden" class="likesCheck" value="${lno }">
 						</c:when>					
 					</c:choose>
-				좋아요&nbsp;<strong>${board.likesCnt }</strong></a>		
+				좋아요&nbsp;<strong>${board.likesCnt }</strong></span>		
 			</div>
 		
 				

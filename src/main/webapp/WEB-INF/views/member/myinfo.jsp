@@ -61,77 +61,36 @@
 
 <script>
 
-/*
 
 $(function() {
-	
-	$("#deleteBtn").click(function() {
-		alert("탈퇴할꺼?????");
-		$("#deleteModal").modal('show');
-		
-	})
-	
-	$("#deleteModal").click(function() {
-		var oldPassword = $("#exPw").val();
-		if(oldPassword == ""){
-			$("#deleteBtn")
-			.attr("disabled","disabled")
-		}else{
-			$("#memberInfo")
-			.attr("action","${appRoot}/member/delete")
-			.submit();							
-		}
-	});
 
-*/	
-
- 	var OriginPwCheckModal = $("#originPwCheck");
-	var selectBtn = "";
-
-		
-	 	$("#exPasswordConfirm").click(function() {
-			switch(selectBtn){
-		
-		 	case "password" :
-				$("#changePwModal")
-				.attr("action","${appRoot}/member/modify")
-				.submit();
-			break; 
-			
-			case "delete" :
-				$("#memberInfo")
-				.attr("action","${appRoot}/member/delete")
-				.submit();
-			break;
-			}
-			
+		$("#deleteMemberBtn").click(function() {	
+			alert("탈퇴하시겠습니까?");
+				$("#deleteMem").modal('show');						
 		});
-
-	
-	$("#changePwBtn").click(function(e) {
-		e.preventDefault();
-		selectBtn = "password";
-		OriginPwCheckModal.modal('show');	
-	});
-
-	
-	$("#deleteBtn").click(function() {
-		var ment = confirm("정말로 탈퇴하겟슴둥?");
-		var pw = $("#oldPassword").val();
-		selectBtn ="delete";
-		
-		if(ment){
-			OriginPwCheckModal.modal('show'); 	
 			
-		}
+		$("#modaldeleteBtn").click(function() {			
+				$("#memberInfoForm")
+				.attr("action", "${appRoot}/member/delete")
+				.submit();						
+			});
 		
-	});
+		$("#changePwBtn").click(function() {
+			$("#originPwCheck").modal('show');
+		});
 		
-
-
-	
-
-
+		$("#exPasswordConfirm").click(function() {
+			$("#changePwModal").modal('show');
+			$("#originPwCheck").modal('hide');
+		})
+		$("#updatePw").click(function() {
+			$("#memberInfoForm2")
+			.attr("action", "${appRoot}/member/modify")
+			.submit();	
+		});
+		
+		
+});
 
 
 </script>
@@ -155,11 +114,16 @@ $(function() {
 		</script>	
 	</c:if>
 
+	<c:if test="${param.status == 'fail' }">
+		<script>
+			alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.')
+		</script>	
+	</c:if>
 				
 			  <div class="row justify-content-around row row-cols-3">
 			  	
 				    <div class="form-group col-4">
-						<form id="memberInfo" method="post" action="${appRoot }/member/modify">
+						<form id="memberInfoForm" method="post" action="${appRoot }/member/modify">
 				    	<h4>내 프로필</h4>
 				    	<div class="info_form">
 					      <span class ="photo_form">
@@ -199,11 +163,12 @@ $(function() {
 						
 						<a class="btn btn-primary" href="${appRoot }/member/profileModify">정보 수정</a>
 						
-						<a class="btn btn-primary" href= "${appRoot }/member/changePw">
+				<%-- 		<a class="btn btn-primary" href= "${appRoot }/member/changePw">
+						</a> --%>
+						<button type="button" id="changePwBtn" class="btn btn-primary" style="float:rigth" >
 								  비밀번호 수정
-						</a>
-						
-						<button type="button" id="deleteBtn" class="btn btn-danger" style="float : right" >
+						</button>
+						<button type="button" id="deleteMemberBtn" class="btn btn-danger" style="float:right" >
 							회원탈퇴
 						</button>
 						
@@ -229,21 +194,16 @@ $(function() {
 								        </button>
 								      </div>
 								      <div class="modal-body">
-									       
-											  <div class="modalPw">
-											    <label for="exPw">기존 비밀번호</label>
-											    <input type="password" class="form-control" id="exPw" name="userpw" aria-describedby="exPassword">
-											  </div>
-											   
+									 
 											  <div class="modalPw">
 											    <label for="newPw">새 비밀번호</label>
-											    <input type="password" class="form-control" id="newPw">						
+											    <input form="memberInfoForm2" type="password" class="form-control" id="newPw">						
 											  </div>
 										
 								      </div>
 								      <div class="modal-footer">
 								        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-								        <button disabled type="submit" name="changPw" id="updatePw" class="btn btn-primary">변경하기</button>
+								        <button type="submit" name="changPw" id="updatePw" class="btn btn-primary">변경하기</button>
 								      </div>
 								    </div>
 								  </div>
@@ -251,34 +211,31 @@ $(function() {
 								
 								
 								 			 <!-- 회원탈퇴 모달창 -->
-							
-								<!-- Modal 
-								<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteMem" aria-hidden="true">
+								
+								<div class="modal fade" id="deleteMem" tabindex="-1" aria-labelledby="deleteMem" aria-hidden="true">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 								      <div class="modal-header">
-								        <h5 class="modal-title" id="deleteMem">회원탈퇴</h5>
+								        <h5 class="modal-title">회원탈퇴</h5>
 								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								          <span aria-hidden="true">&times;</span>
 								        </button>
 								      </div>
-								      <div class="modal-body">
-									        <form action="${appRoot }/member/delete" method="post">
+								      <div class="modal-body">				       
 											  <div class="modalDelete">
-											    <label for="exPw">기존 비밀번호</label>
-											    <input type="password" class="form-control" id="exPw" name="userpw" aria-describedby="exPassword">
+											    <label for="ex-Password">기존 비밀번호</label>
+											    <input form="memberInfoForm" type="password" class="form-control" id="ex-Password" name="oldPassword" aria-describedby="oldPassword">									   
 											    <small class="form-text text-danger">*현재 회원탈퇴 페이지입니다. 신중하게 결정하세요.</small>
-											  </div>
-											</form>	
+											  </div>										
 								      </div>
 								      <div class="modal-footer">
 								        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-								        <button type="submit" name="delete" id="deleteBtn" class="btn btn-danger">탈퇴</button>
+								        <button type="submit" id="modaldeleteBtn" class="btn btn-danger">탈퇴</button>
 								      </div>
 								    </div>
 								  </div>
 								</div>
-								-->
+							<!-- Modal 	-->
 					<%-- 기존 패스워드 입력 모달 --%>
 			<div class="modal fade" id="originPwCheck" >
 				<div class="modal-dialog">
@@ -294,15 +251,15 @@ $(function() {
 						
 						<div class="modal-body">
 							<div class="passwordCheckForm">
-								<label for="originPw">기존 패스워드</label>
-								<input name="oldPassword" type="password" class="form-control" id="oldPassword">
+								<label for="oldPassword">기존 패스워드</label>
+								<input form="memberInfoForm2" name="oldPassword" type="password" class="form-control" id="oldPassword">
 							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">
 								닫기
 							</button>
-							<button type="button" id="exPasswordConfirm" class="btn btn-danger">확인</button>
+							<button type="submit" id="exPasswordConfirm" class="btn btn-danger">확인</button>
 						</div>
 					</div>
 				</div>

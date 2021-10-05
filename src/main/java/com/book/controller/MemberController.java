@@ -43,6 +43,13 @@ public class MemberController {
 	@Setter(onMethod_=@Autowired)
 	private PasswordEncoder encoder;
 	
+	@RequestMapping("/list")
+	public String list(Model model) {
+		List<UserVO> list = service.list();
+		model.addAttribute("list", list);
+		return "/member/list";
+	}
+	
 
 	@RequestMapping("/fail")
 	public void authfail() {
@@ -110,6 +117,7 @@ public class MemberController {
 			CustomUser mem = (CustomUser) auth.getPrincipal();
 			mem.setUser(user);
 			log.info("정보수정성공");
+		
 		}
 		return "redirect:/member/myinfo";		
 	}
@@ -117,6 +125,10 @@ public class MemberController {
 	@PostMapping("/modify")
 	@PreAuthorize("principal.username == #user.usermail")
 	public String modify(UserVO user, RedirectAttributes rttr, Authentication auth, String oldPassword) {
+		log.info(user);
+		log.info(oldPassword);
+		
+		
 		boolean success = service.modify(user, oldPassword);
 		
 		if(success) {
@@ -124,8 +136,10 @@ public class MemberController {
 			
 			CustomUser mem = (CustomUser) auth.getPrincipal();
 			mem.setUser(user);
+	
 		}else {
 			rttr.addAttribute("status","error");
+			
 		}
 		return "redirect :/member/myinfo";
 	}
@@ -133,7 +147,7 @@ public class MemberController {
 	
 	
 	
-	@RequestMapping(value="/delete" , method= {RequestMethod.GET,RequestMethod.POST})
+	@PostMapping("/delete")
 	@PreAuthorize("principal.username == #user.usermail")
 	public String delete(UserVO user, RedirectAttributes rttr, HttpServletRequest req, String oldPassword) throws ServletException{
 		log.info(user);
@@ -144,11 +158,16 @@ public class MemberController {
 		
 		if(success) {
 			req.logout();
-			return "redirect:/board/list";
+			return "redirect:/member/goodbye";
 		}else {
-			rttr.addAttribute("status", "error");
+			rttr.addAttribute("status", "fail");
 			return "redirect:/member/myinfo";
 		}
+	}
+	
+	@RequestMapping("/goodbye")
+	public void goodbye() {
+		
 	}
 	
 	@GetMapping("/checkMail")
@@ -201,6 +220,24 @@ public class MemberController {
 	public void findpw() {
 		
 	}
+//	
+//	@PostMapping("/findpw")
+//	public String findpw() {
+//		MemberVO user = service.check(email);
+//		
+//		if(user != null && user.getEmail().equals(email)) {
+//					int ranNo = (int)(Math.random() * (99999-10000 + 1)) + 10000;
+//					String tempPw = String.valueOf(ranNo);
+//					user.setUserpw(tempPw);
+//					service.modify(user);
+//					
+//					String subject = "임시 비밀 번호 발급 안내";
+//					StringBuilder bds = new StringBuilder();
+//					bds.append("임시 비밀번호는" + tempPw + "입니다.");
+//					service.send(subject, bds.toString(),"testaddr67@gmail.com", email);
+//		}
+//		return "redirect: ${appRoot}/member/findpw";
+//	}
 
 	@PostMapping("/profileUpload")
 	@PreAuthorize("principal.username == #usermail")

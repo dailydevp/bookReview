@@ -13,15 +13,67 @@
 
 <title>책 게시판</title>
 <na:navbar></na:navbar>
+<style>
+
+
+
+
+
+.box{
+	justify-content: center;
+	height: 30px;
+	display: flex;
+	cursor: pointer;
+	padding: 20px;
+	background: #fff;
+	border-radius: 30px;
+	align-items: center;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.box:hover input{
+	margin-top: 15px;
+	width: 100px;
+}
+
+.box input {
+	width: 0;
+	outline: none;
+	border: none;
+	font-weight: 500;
+	transition : 0.8s;
+	background: transparent;
+}
+
+.box button .fas {
+	color: #1daf;
+	font-size: 18px;
+}
+
+#search{
+	margin-top: 15px;
+	outline: none;
+	border: none;
+	background: transparent;
+}
+</style>
 
 <script type="text/javascript">
 var appRoot = "${appRoot}";
 var usermail = "${pinfo.user.usermail}";
+var bno = "${board.bno }";
+var boardBno = "${board.bno}";
+var usermail = "${pinfo.user.usermail}";
+var file =  "${pinfo.user.fileName}";
+var likes = "${board.likesCnt }";
+var boardlike = "${board.likes }";
+var boardlike2 = "${board.likesCnt }";
+var bb = "${board.views }";
 
 
 $(function() {
 	
-	$("#list_pagenation a").click(function (e) {
+	$("#listPagenation a").click(function (e) {
 		e.preventDefault();
 		
 		console.log("a요소 클릭됨");
@@ -124,7 +176,7 @@ $(function () {
 		
 		<!-- Pagination  -->
 		<nav aria-label="Page navigation example">
-		  <ul id="list_pagination" class="pagination justify-content-center">
+		  <ul id="listPagination" class="pagination justify-content-center">
 		  
 		  <c:if test="${pageMaker.prev }">
 		    <li class="page-item">

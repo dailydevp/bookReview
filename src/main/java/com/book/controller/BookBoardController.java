@@ -117,6 +117,7 @@ public class BookBoardController {
 			Long one = 1L;
 			if(one.equals(Clicked)) {
 				vo.setClicked(true);
+				log.info(vo);
 			}
 		}
 		

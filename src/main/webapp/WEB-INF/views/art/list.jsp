@@ -25,7 +25,7 @@ var bno2 = "${board.bno}"; */
 
 	 
 $(function() {
-		
+	
 	$("#listPagination a").click(function (e) {
 		e.preventDefault();
 		
@@ -142,13 +142,12 @@ td.viewInfo {
 			  						<br>
 			  						<fmt:formatDate value="${artboard.startDate  }" pattern="yyyy-MM-dd"/>
 			  						~<fmt:formatDate value="${artboard.endDate  }" pattern="yyyy-MM-dd"/></td>
-			  				
 			  			
 			  					<td class="viewInfo">
 			  					
 			  							<i class="far fa-comment-dots"></i>&nbsp;${artboard.replyCnt }
 			  						&nbsp;
-										<i class="far fa-eye"></i>&nbsp;${artboard.views }
+										<i class="far fa-eye"></i>&nbsp;${artboard.views } ...${lno }
 									&nbsp;
 					<c:choose>
 						<c:when test="${!artboard.likeClicked}">
@@ -166,7 +165,8 @@ td.viewInfo {
 						<c:otherwise>
 							0도 아니고 1도 아님.
 						</c:otherwise>
-					</c:choose>  ${artboard.likesCnt }
+					</c:choose>  ${artboard.likesCnt } 
+										
 									</td>
 									
 							

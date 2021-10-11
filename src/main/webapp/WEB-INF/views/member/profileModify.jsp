@@ -13,6 +13,38 @@
 <script type="text/javascript">
 $(function() {
 	
+	
+		//닉네임 중복 체크
+		
+		$("#member-info-nick").keyup(function() {
+			var nickVal = $("#member-info-nick").val(); 
+			
+			if(nickVal == ""){
+				$("#nickname-message").text("닉네임을 입력해주세요.");
+			}else{
+				var data = {nick : nickVal};
+				$.ajax({
+					type : "get",
+					url : "${appRoot}/member/checkNick",
+					data : data,
+					success : function(data) {
+						if(data == "success"){
+							console.log("사용가능 닉네임")
+							validNick = true;
+							$("#nickname-message").empty();
+						}
+						else if(data == "exist") {
+							console.log("사용불가 닉네임")	
+							$("#nickname-message").text("이미 사용중인 닉네임입니다.");
+						}
+					},
+					error : function() {
+						console.log("확인불가");
+					}
+				});
+			}
+		})
+		
 	$("#modifyBtn").click(function() {		
 		$("#infoModify")
 		.attr("action","${appRoot}/member/modifyInfo")
@@ -109,6 +141,7 @@ $(function() {
 							<div class ="info_form">
 								<label for="member-info-nick" id="label"><strong>닉네임</strong></label>
 								<input value="${pinfo.user.nick }" type="text" class="form-control-plaintext" id="member-info-nick" name="nick">
+								<small id="nickname-message" class="form-text text-danger"></small>
 							</div>	
 							
 							<div class ="info_form">

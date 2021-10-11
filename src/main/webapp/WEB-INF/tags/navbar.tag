@@ -19,32 +19,30 @@
 <nav class="navbar navbar-expand-sm navbar-light bg-light" >
 
 	<ul class="navbar-nav ml-auto">
-	 <li class="nav-item dropdown">	
-	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"  style=""role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          <i class="fas fa-bars"></i>
-	        </a>
-	        <div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdown" >
-	        
+	
+				<a class="nav-link" href="${appRoot }/main/home">HOME</a>
+
+
 	          <sec:authorize access="!isAuthenticated()">
-				<a class="dropdown-item" href="${appRoot }/member/signin">SIGN IN</a>
+				<a class="nav-link" href="${appRoot }/member/signin">SIGN IN</a>
 			
   			  </sec:authorize>
-  			  
+  			
   			  <sec:authorize access="isAuthenticated()">
-	  			<form action="${appRoot }/logout" method="post">
-		  			<input type="submit" class="dropdown-item" value="LOGOUT">
-		  			<a class="dropdown-item" href="${appRoot }/member/myinfo">MYINFO</a>
+  			  <a class="nav-link" href="${appRoot }/logout" method="post" type="submit">
+  			  LOGOUT</a>
+		  			<a class="nav-link" href="${appRoot }/member/myinfo">MYINFO</a>
 	  		
 	 			</form>
   			  </sec:authorize>
 	        	      
 	        
-	          <a class="dropdown-item" href="${appRoot }/board/list">BOOK</a>
-	          <a class="dropdown-item" href="${appRoot }/art/list">ART</a>
-	          <div class="dropdown-divider"></div>
-	          <a class="dropdown-item" href="${appRoot }/board/write">글 작성하기</a>
-	        </div>
-	      </li>
+	          <a class="nav-link" href="${appRoot }/board/list">BOOK</a>
+	          <a class="nav-link" href="${appRoot }/art/list">ART</a>
+	   
+	          <sec:authorize access="isAuthenticated()">
+	          <a class="nav-link" href="${appRoot }/board/write">글 작성하기</a>
+	          </sec:authorize>
 	      
 	      <div class="box">
 	        <form class="d-flex">
@@ -64,4 +62,6 @@
 	      </div>
 	</ul>
 </nav>
+
+
 

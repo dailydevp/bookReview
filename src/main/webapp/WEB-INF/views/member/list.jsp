@@ -29,14 +29,14 @@
     </tr>
   </thead>
   <tbody>
-  	<c:forEach items="${list }" var = "member" varStatus ="status" >	
+  	<c:forEach items="${list }" var = "member"  varStatus ="status" >	
 	    <tr>
 	      <td>${status.count}</td>
 	      <td>${member.usermail }</td>
 	      <td>${member.nick }</td>
 	      <td>${member.phoneNo }</td>
 	      <td>${member.regdate }</td>
-	      <td>${auth.auth }</td> 
+ 	      <td>${auth.auth }</td>  
 	    </tr>
 	</c:forEach> 
   </tbody>

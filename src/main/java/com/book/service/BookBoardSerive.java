@@ -26,5 +26,7 @@ public interface BookBoardSerive {
 	public boolean delete(Long bno);
 	
 	public int views(Long bno);
+	
+	public int likes(Long bno);
 
 }

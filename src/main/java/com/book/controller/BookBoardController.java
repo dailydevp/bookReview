@@ -31,20 +31,15 @@ import lombok.extern.log4j.Log4j;
 
 @Controller
 @RequestMapping("/board")
-@AllArgsConstructor
 @Log4j
 public class BookBoardController {
 	
 
-	public BookBoardSerive service;
-	public BookLikesService lservice;
+	@Setter(onMethod_=@Autowired)
+	private BookBoardSerive service;
 	
-	@GetMapping("/map")
-	public void map() {
-		
-	}
-	
-
+	@Setter(onMethod_=@Autowired)
+	private BookLikesService lservice;
 	
 
 	
@@ -72,6 +67,7 @@ public class BookBoardController {
 				if(likesList.contains(vo.getBno())) {
 				log.info(vo);
 				vo.setClicked(true);
+			
 			}
 		}
 	}
@@ -110,6 +106,8 @@ public class BookBoardController {
 		
 		BookBoardVO vo = service.read(bno);
 		
+		model.addAttribute("users" , vo);
+		
 		log.info(principal);
 		
 		if(principal != null) {
@@ -118,6 +116,7 @@ public class BookBoardController {
 			if(one.equals(Clicked)) {
 				vo.setClicked(true);
 				log.info(vo);
+				service.likes(bno);
 			}
 		}
 		
@@ -162,6 +161,10 @@ public class BookBoardController {
 			rttr.addFlashAttribute("result","success");
 			rttr.addFlashAttribute("messageTitle", "삭제 성공.");
 			rttr.addFlashAttribute("messageBody", "삭제 되었습니다.");
+		}else {
+			rttr.addFlashAttribute("result","fail");
+			rttr.addFlashAttribute("messageTitle", "삭제 실패.");
+			rttr.addFlashAttribute("messageBody", "삭제 실패 했습니다.");
 		}
 		
 		rttr.addAttribute("pageNo", cri.getPageNo());

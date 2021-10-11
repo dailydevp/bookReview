@@ -27,4 +27,6 @@ public interface BookBoardMapper {
 	public void deleteByUsermail(UserVO vo);
 
 	public int views(Long bno);
+	
+	public int likes(Long bno);
 }

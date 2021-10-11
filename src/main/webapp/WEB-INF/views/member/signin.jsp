@@ -406,6 +406,56 @@ window.onload = function() {
 	
 }
 </script>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" 
+src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v12.0&appId=834096750623764&autoLogAppEvents=1" nonce="tZUgub4L">
+</script>
+
+<script>
+
+  function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+    console.log('statusChangeCallback');
+    console.log(response);                   // The current login status of the person.
+    if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+      testAPI();  
+    } else {                                 // Not logged into your webpage or we are unable to tell.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this webpage.';
+    }
+  }
+
+
+  function checkLoginState() {               // Called when a person is finished with the Login Button.
+    FB.getLoginStatus(function(response) {   // See the onlogin handler
+      statusChangeCallback(response);
+    });
+  }
+
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{834096750623764}',
+      cookie     : true,                     // Enable cookies to allow the server to access the session.
+      xfbml      : true,                     // Parse social plugins on this webpage.
+      version    : '{12}'           // Use this Graph API version for this call.
+    });
+
+
+    FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
+      statusChangeCallback(response);        // Returns the login status.
+    });
+  };
+ 
+  function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+
+</script>
 
  <!-- Load the JS SDK asynchronously
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
@@ -500,7 +550,7 @@ window.onload = function() {
 		<form id="signin" method="post" action="${appRoot }/login">
 			<h1>Sign in</h1>
 			<div class="social-container">
-				<a href="#" class="social" id="authBtn"><i class="fab fa-facebook-f"></i></a>
+				<a href="https://www.facebook.com/v12.0/dialog/oauth?app_id=834096750623764&auth_type=&cbt=1633876455070&channel_url=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb%3Df25974a06f4be8c%26domain%3Dlocalhost%26is_canvas%3Dfalse%26origin%3Dhttp%253A%252F%252Flocalhost%253A8080%252Ff1a588ecaad8bb%26relation%3Dopener&client_id=834096750623764&display=popup&domain=localhost&e2e=%7B%7D&fallback_redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcontroller%2Fmember%2Fsignin%23&force_confirmation=false&id=f1433cbad9746c&locale=ko_KR&logger_id=bcfd1ec7-bc4d-42cc-b11e-d49d1d1b9ab6&messenger_page_id=&origin=1&plugin_prepare=true&redirect_uri=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb%3Dff96f0cf5c5d3%26domain%3Dlocalhost%26is_canvas%3Dfalse%26origin%3Dhttp%253A%252F%252Flocalhost%253A8080%252Ff1a588ecaad8bb%26relation%3Dopener.parent%26frame%3Df1433cbad9746c&ref=LoginButton&reset_messenger_state=false&response_type=signed_request%2Ctoken%2Cgraph_domain&scope=public_profile%2Cemail&sdk=joey&size=%7B%22width%22%3A600%2C%22height%22%3A679%7D&url=dialog%2Foauth&version=v12.0" class="social" id="authBtn"><i class="fab fa-facebook-f"></i></a>
 				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
 				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			</div>

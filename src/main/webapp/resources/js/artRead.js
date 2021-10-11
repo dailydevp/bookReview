@@ -1,4 +1,7 @@
+
+ 
  $(function(){
+
  
  	 var appRoot = window.appRoot ? window.appRoot : '';
     var boardBno = window.boardBno ? window.boardBno : 0;
@@ -44,7 +47,7 @@
         <div class="media-body">
           <h5 class="my-4">${reply.replyerName}</h5>
           <p>${reply.reply}</p>
-          <small>${new Date(reply.replyDate).toISOString().split("T")[0]}</small>
+          <small>${new Date(reply.regDate).toISOString().split("T")[0]}</small>
         </div>
       </li>`;
       var replyComponent = $(replyHTML).click(function(){

@@ -16,7 +16,7 @@ public class BookBoardVO {
 	private String writerName;
 	private Date regDate;
 	private Date updateDate;
-	private int likes;
+	private boolean likes;
 	private int views;
 	
 

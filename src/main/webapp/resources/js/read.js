@@ -1,7 +1,20 @@
  $(function(){
  
- 	 var appRoot = window.appRoot ? window.appRoot : '';
+ 	var appRoot = window.appRoot ? window.appRoot : '';
     var boardBno = window.boardBno ? window.boardBno : 0;
+    
+    	$("#listPagenation a").click(function (e) {
+		e.preventDefault();
+		
+		console.log("a요소 클릭됨");
+		
+	var actionForm = $("#actionForm");
+	
+	actionForm.find("[name=pageNo]").val($(this).attr("href"));
+	
+	actionForm.submit();
+	});
+	
  
 	function showModifyModal(rno){
 		$.ajax({
@@ -176,6 +189,20 @@
 		}
 	});
 	
+	/* 글 삭제 */
+	
+	$(document).ready(function deleteCheck() {
+	$("#delete").click(function() {
+		var deleteUrl = appRoot + "/board/delete";
+		var readUrl = appRoot +"/board/read";
+		var msg = confirm("글을 삭제하시겠슴둥...?");
+		if(msg == true){
+			$("#readForm").attr("action", deleteUrl).submit();
+		}else{
+			return appRoot + "/board/list";
+		}
+	})
+})
 	
 	$('.likesBtn').click(function(){
 		update(this);

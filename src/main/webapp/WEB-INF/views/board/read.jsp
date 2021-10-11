@@ -14,7 +14,7 @@
 var appRoot = "${appRoot}";
 var boardBno = "${board.bno}";
 var usermail = "${pinfo.user.usermail}";
-var file =  "${pinfo.user.fileName}";
+var fileN = "${user.fileName }"
 var likes = "${board.likesCnt }";
 var boardlike = "${board.likes }";
 var boardlike2 = "${board.likesCnt }";
@@ -26,8 +26,11 @@ var bb = "${board.views }";
 a{
 	padding-top : 17px;
 	color : #050A30;
+    text-decoration:none;
 
 }
+
+ a:hover { color: #050A30; text-decoration:none;}
 
 span{
 	font-size:15px;
@@ -114,18 +117,7 @@ img {
     }
 </style>
 <script>
-$(document).ready(function deleteCheck() {
-	$("#delete").click(function() {
-		var deleteUrl = "${appRoot}/board/delete";
-		var readUrl = "${appRoot}/board/read";
-		var msg = confirm("글을 삭제하시겠슴둥...?");
-		if(msg == true){
-			$("#readForm").attr("action", deleteUrl).submit();
-		}else{
-			return;
-		}
-	})
-})
+
 </script>
 
 <title>Book List</title>
@@ -146,12 +138,20 @@ $(document).ready(function deleteCheck() {
 						<div class="form-group">
 							<div class="articleInfo">
 								<div class="writerInfo">
+								
+										    
+							<img id="profile"
+								 <c:if test="${empty pinfo.user.fileName }">
+						    	 	 src="${profile }basicProfile/basicImage.png"
+						    	  </c:if>
+								
+								<c:if test="${not empty pinfo.user.fileName }">
+									src="${profile }${board.writer }/${vo.fileName }"
+								</c:if>
+							>
+							
 									
-											<c:if test="${not empty pinfo.user.fileName }">
-												<div>
-													<img id="profile" src="${profile}${pinfo.user.usermail }/${pinfo.user.fileName}">
-												</div>
-											</c:if>
+										
 								
 									
 									<input type = "hidden" id="writer" class="form-control-plaintext" name="writer" value="${board.writer }" readonly>	
@@ -213,31 +213,30 @@ $(document).ready(function deleteCheck() {
 					
 			<div class="form-group">
 				<label for="text"> </label>
-				<textarea id="text" class="form-control-plaintext" name="content" rows="15" readonly> <c:out value="${board.content }"/> </textarea>
+				<textarea id="text" class="form-control-plaintext" name="content" rows="15" readonly> ${board.content } </textarea>
 			</div>
 		
 		
 			<div class="replyZone">		
+
+				<a href="#" class="replys"><i class="far fa-comment"></i><td>&nbsp;댓글&nbsp;</td><strong>${board.replyCnt }</td></strong></a>
 			
-			<div class="views">kk ${board.views }</div>		
-				<div class="replys"><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong></div>
-			
-				<div id="likes">
+				<a href="#" class="likes" role="button" id="likes">
 					<c:choose>
 						<c:when test="${!board.clicked}">
 						<span class="likesBtn">
-							<i type="button" class="far fa-heart"></i>
+							<i class="far fa-heart"></i>
 						</span>
-							<input type="hidden" class="likesCheck" value="${lno }">
+							<input type="hidden" class="likesCheck" value="${l.lno }">
 						</c:when>					
 						<c:when test="${board.clicked}">
 						<span class="likesBtn">
-							<i type="button" class="fas fa-heart"></i>
+							<i class="fas fa-heart"></i>
 						</span>
-							<input type="hidden" class="likesCheck" value="${lno }">
+							<input type="hidden" class="likesCheck" value="${l.lno }">
 						</c:when>					
 					</c:choose>
-				좋아요&nbsp;<strong>${board.likesCnt }</strong></div>		
+				좋아요&nbsp;<strong>${board.likesCnt } ... ${board.clicked} ...k ${l.lno } ...aa ${board.replyCnt }</strong></a>		
 			</div>
 		
 				

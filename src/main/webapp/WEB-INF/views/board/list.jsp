@@ -63,17 +63,10 @@ var appRoot = "${appRoot}";
 var usermail = "${pinfo.user.usermail}";
 var bno = "${board.bno }";
 var boardBno = "${board.bno}";
-var usermail = "${pinfo.user.usermail}";
-var file =  "${pinfo.user.fileName}";
-var likes = "${board.likesCnt }";
-var boardlike = "${board.likes }";
-var boardlike2 = "${board.likesCnt }";
-var bb = "${board.views }";
-
 
 $(function() {
 	
-	$("#listPagenation a").click(function (e) {
+	$("#listPagination a").click(function (e) {
 		e.preventDefault();
 		
 		console.log("a요소 클릭됨");
@@ -94,8 +87,10 @@ $(function () {
 	}
 })
 
+
 </script>
 <script src="${appRoot }/resources/js/read.js"></script> 
+
 </head>
 <body>
 <!-- 
@@ -141,25 +136,8 @@ $(function () {
 		  			<td>${board.views }</td>
 		  		
 		  			<td>${board.likesCnt }
-	<%-- 	  			
-		  								<c:choose>
-						<c:when test="${!bboard.Clicked}">
-						<span class="likesBtn">
-							<i type="button" class="far fa-heart"></i>
-						</span>
-							<input type="hidden" class="likesCheck" value="${lno }">
-						</c:when>					
-						<c:when test="${bboard.Clicked}">
-						<span class="likesBtn">
-							<i type="button" class="fas fa-heart"></i>
-						</span>
-							<input type="hidden" class="likesCheck" value="${lno }">
-						</c:when>	
-						<c:otherwise>
-							0도 아니고 1도 아님.
-						</c:otherwise>
-					</c:choose>  ${board.likesCnt }
-					 --%>
+		  			
+
 		  			</td>
 		  			
 		  			
@@ -171,7 +149,7 @@ $(function () {
 		  	</c:forEach>
 		  </tbody>
 		</table>
-	</div>	
+
 		
 		
 		<!-- Pagination  -->
@@ -184,9 +162,10 @@ $(function () {
 		    </li>
 		  </c:if>
 		  
-		  <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="num">
-		    <li class="page-item ${num == cri.pageNo ? 'active' : '' }">
-		    	<a class="page-link" href="${num }">${num }</a></li>	  
+		  <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var = "num">
+		    <li class="page-item" ${num == cri.pageNo ? 'active' : '' }>
+		    	<a class="page-link" href="${num }">${num }</a>
+		    </li>	  
 		  </c:forEach>
 		  
 		  	<c:if test="${pageMaker.next }">
@@ -196,7 +175,7 @@ $(function () {
 			 </c:if>
 		 	 </ul>
 		</nav>
-			 
+		
 			<%-- 페이지 링크용 Form --%>
 			<div style="display: none;">
 				<form id="actionForm" action="${appRoot }/board/list" method="get">
@@ -206,7 +185,7 @@ $(function () {
 					<input name="keyword" value="${cri.keyword }" />
 				</form>
 			</div>
-	
+		</div>
 	
 	<c:if test="${not empty result }">
 		<div id="board-modal" class="modal" tabindex="-1">

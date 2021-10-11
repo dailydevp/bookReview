@@ -180,5 +180,10 @@ public class BookBoardServiceImpl implements BookBoardSerive{
 		return mapper.views(bno);
 	}
 
+	@Override
+	public int likes(Long bno) {
+		return mapper.likes(bno);
+	}
+
 
 }

@@ -15,6 +15,7 @@ public class UserVO {
 	private Date regdate;
 	private String fileName;
 	private boolean enabled;
+	private String role;
 	
 	private List<AuthVO> authList;
 

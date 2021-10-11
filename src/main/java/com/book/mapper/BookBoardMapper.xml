@@ -40,10 +40,10 @@
  		--	sum(l.lno) likesCnt
  		
  		--	count reply
- 			(SELECT COUNT(*) FROM b_reply r WHERE r.bno = b.bno) replyCnt,
+ 			(SELECT COUNT(*) FROM b_reply r WHERE r.bno = b.bno) AS replyCnt,
  			
  		--	sum likes
- 			(SELECT IFNULL(SUM(l.lno),0) FROM b_likes l WHERE l.bno = b.bno) likesCnt
+ 			(SELECT IFNULL(SUM(l.lno), 0) FROM b_likes l WHERE l.bno = b.bno) AS likesCnt
  		FROM b_board  b
  			--	LEFT JOIN b_reply r ON b.bno = r.bno
  				INNER JOIN member m ON b.writer = m.usermail
@@ -154,6 +154,15 @@
  			b_board
  		SET
  			views = views + 1
+ 		WHERE
+ 			bno = #{bno}
+ 	</update>
+ 	
+ 	<update id="likes">
+ 		UPDATE
+ 			b_board
+ 		SET
+ 			likes = likes + 1
  		WHERE
  			bno = #{bno}
  	</update>

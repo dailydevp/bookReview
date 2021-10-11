@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.book.domain.AuthVO;
 import com.book.domain.Criteria;
 import com.book.domain.UserVO;
 import com.book.security.domain.CustomUser;
@@ -46,10 +47,21 @@ public class MemberController {
 	@RequestMapping("/list")
 	public String list(Model model) {
 		List<UserVO> list = service.list();
+
 		model.addAttribute("list", list);
 		return "/member/list";
 	}
 	
+	
+	@RequestMapping("/changePw")
+	public void changePw() {
+		
+	}
+	
+	@RequestMapping("/facebook")
+	public void facebook() {
+		
+	}
 
 	@RequestMapping("/fail")
 	public void authfail() {
@@ -83,17 +95,6 @@ public class MemberController {
 		}
 	}
 	
-	@RequestMapping(value="/changePw", method= {RequestMethod.GET,RequestMethod.POST})
-	@PreAuthorize("isAuthenticated()")
-	public void pwModify(Criteria cri, Principal principal, Model model) {
-		log.info(principal.getName());
-		UserVO users = service.read(principal.getName());
-		
-		model.addAttribute("users", users);
-		
-		
-			
-	}
 	
 	@RequestMapping(value={"/myinfo","/profileModify"}, method= {RequestMethod.GET,RequestMethod.POST})
 	@PreAuthorize("isAuthenticated()")
@@ -136,7 +137,7 @@ public class MemberController {
 			
 			CustomUser mem = (CustomUser) auth.getPrincipal();
 			mem.setUser(user);
-	
+			return "redirect:/member/myinfo";
 		}else {
 			rttr.addAttribute("status","error");
 			
@@ -186,6 +187,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/checkPw")
+	@PreAuthorize("principal.username == #vo.usermail")
 	public void checkPassword (@ModelAttribute("userpw") String userpw, RedirectAttributes rttr){
 		log.info("비밀번호 확인");
 		//나중에 다시 생각해보기.

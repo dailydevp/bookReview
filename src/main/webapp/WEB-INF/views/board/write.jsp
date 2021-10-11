@@ -99,7 +99,7 @@ $(function() {
 					</div>
 					<div class="form-group">
 						<label for="file">파일</label>
-						<input id="file" class="form-control" type="file" name="file">
+						<input multiple="multiple" id="file" class="form-control" type="file" name="file">
 					</div>
 					
 					<input type="submit" class="btn btn-primary" id="writeBtn" value="작성등록" />

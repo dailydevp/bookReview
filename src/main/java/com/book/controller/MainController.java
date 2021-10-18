@@ -26,6 +26,11 @@ public class MainController {
 	@Setter(onMethod_=@Autowired)
 	private BookBoardSerive service;
 	
+	
+	@GetMapping("/test")
+	public void test() {
+		
+	}
 
 	@GetMapping("/homePage")
 	public void homePage() {

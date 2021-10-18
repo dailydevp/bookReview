@@ -19,6 +19,7 @@ var likes = "${board.likesCnt }";
 var boardlike = "${board.likes }";
 var boardlike2 = "${board.likesCnt }";
 var bb = "${board.views }";
+var filesss = "${imgRoot}book/${board.bno }/${mfile}"
 </script>
 
 <style>
@@ -65,12 +66,37 @@ img {
 	width : 300px;
 }
 
-#likes{
-	position : relative;
-	padding : 2px 0px;
-	margin-bottom: 120px;
+
+.box{
+	justify-content: center;
+	height: 30px;
+	display: flex;
+	cursor: pointer;
+	padding: 20px;
+	background: #fff;
+	border-radius: 30px;
+	align-items: center;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
+.box:hover input{
+	margin-top: 15px;
+	width: 100px;
+}
+
+.box input {
+	width: 0;
+	outline: none;
+	border: none;
+	font-weight: 500;
+	transition : 0.8s;
+	background: transparent;
+}
+
+.box button .fas {
+	color: #1daf;
+	font-size: 18px;
+}
 #profile {
 	margin-top : 10px;
 	height : 40px;
@@ -87,6 +113,10 @@ img {
 	background-color: white;
 }
 
+#likes{
+	border-color: transparent;
+	background: transparent;
+}
 
 #title{
 	font-size: 40px;
@@ -112,6 +142,14 @@ img {
 #replyTextModify{
 	resize: none;
 	}
+	
+#search{
+	margin-top: 15px;
+	outline: none;
+	border: none;
+	background: transparent;
+}
+
 *:focus {
     outline: none;
     }
@@ -124,7 +162,9 @@ img {
 <na:navbar></na:navbar>
 </head>
 <body>
-	
+
+<bd:navbar></bd:navbar>
+
 <div class="container">
 	<div class="readContent">
 		<div class="read-header">
@@ -134,6 +174,7 @@ img {
 					<div class="header-info">
 						<label for="title"></label>
 						<input id="title" class="form-control-plaintext" name="title" value="${board.title }" readonly>
+						<input name="reply" id="replyeCnt" class="form-control-plaintext" value="${board.likesCnt }">
 					</div>
 						<div class="form-group">
 							<div class="articleInfo">
@@ -141,25 +182,23 @@ img {
 								
 										    
 							<img id="profile"
-								 <c:if test="${empty pinfo.user.fileName }">
+								 <c:if test="${empty vo.fileName }">
 						    	 	 src="${profile }basicProfile/basicImage.png"
 						    	  </c:if>
 								
-								<c:if test="${not empty pinfo.user.fileName }">
+								<c:if test="${not empty vo.fileName }">
 									src="${profile }${board.writer }/${vo.fileName }"
 								</c:if>
 							>
-							
-									
-										
-								
-									
+		
 									<input type = "hidden" id="writer" class="form-control-plaintext" name="writer" value="${board.writer }" readonly>	
 									<a href="${appRoot }/member/myinfo"><span>${board.writerName }</span></a>
 										<span class="regdate">
 											<fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd HH:mm"/>
 										</span>			
 										
+													
+	
 										
 										<span class="modeForm">
 											<ul class="changeMode">
@@ -183,7 +222,7 @@ img {
 												
 											
 												<c:if test="${pinfo.user.usermail eq board.writer }" >
-													<a href="${modifyUrl }">수정</a> |
+													<a href="${modifyUrl }">수정&nbsp;</a>|
 													<input type="submit" id="delete" onclick="deleteCheck()" value="삭제" >
 												</c:if>
 											</ul>
@@ -202,10 +241,12 @@ img {
 		
 				<div class="photoZone">
 					<c:if test="${not empty board.fileName }">
-						<div class="photoInfo">
-							<img class="img-fluid"
-							src ="${imgRoot}book/${board.bno }/${board.fileName }">
-						</div>
+						<c:forEach items="${board.fileName }" var="mfile">
+							<div class="photoInfo">
+								<img class="img-fluid"
+								src ="${imgRoot}book/${board.bno }/${file}">
+							</div>
+						</c:forEach>
 					</c:if>
 				</div>
 			<div class="writerInfo">
@@ -213,30 +254,30 @@ img {
 					
 			<div class="form-group">
 				<label for="text"> </label>
-				<textarea id="text" class="form-control-plaintext" name="content" rows="15" readonly> ${board.content } </textarea>
+				<textarea id="text" class="form-control-plaintext" name="content" rows="5" readonly> ${board.content } </textarea>
 			</div>
 		
 		
-			<div class="replyZone">		
+			<div class="form-group">		
 
-				<a href="#" class="replys"><i class="far fa-comment"></i><td>&nbsp;댓글&nbsp;</td><strong>${board.replyCnt }</td></strong></a>
+				<div class="replys"><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong></div>
 			
-				<a href="#" class="likes" role="button" id="likes">
+				<button id="likes" >
 					<c:choose>
 						<c:when test="${!board.clicked}">
 						<span class="likesBtn">
 							<i class="far fa-heart"></i>
 						</span>
-							<input type="hidden" class="likesCheck" value="${l.lno }">
+							<input type="hidden" class="likesCheck" value="${lno }">
 						</c:when>					
 						<c:when test="${board.clicked}">
 						<span class="likesBtn">
 							<i class="fas fa-heart"></i>
 						</span>
-							<input type="hidden" class="likesCheck" value="${l.lno }">
+							<input type="hidden" class="likesCheck" value="${lno }">
 						</c:when>					
 					</c:choose>
-				좋아요&nbsp;<strong>${board.likesCnt } ... ${board.clicked} ...k ${l.lno } ...aa ${board.replyCnt }</strong></a>		
+				좋아요&nbsp;<strong>${board.likesCnt }</strong></button>		
 			</div>
 		
 				

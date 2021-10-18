@@ -62,6 +62,15 @@ public class MemberController {
 	public void facebook() {
 		
 	}
+	
+	@RequestMapping("/userinfo")
+	@PreAuthorize("isAuthenticated()")
+	public void userinfo(Criteria cri, Principal principal, Model model) {
+		log.info("userInfo");
+		UserVO users = service.read(principal.getName());
+		
+		model.addAttribute("users", users);
+	}
 
 	@RequestMapping("/fail")
 	public void authfail() {
@@ -128,21 +137,22 @@ public class MemberController {
 	public String modify(UserVO user, RedirectAttributes rttr, Authentication auth, String oldPassword) {
 		log.info(user);
 		log.info(oldPassword);
+		log.info(user.getUserpw());
 		
 		
 		boolean success = service.modify(user, oldPassword);
 		
 		if(success) {
-			rttr.addAttribute("status", "success");
+			rttr.addAttribute("status", "ok");
 			
 			CustomUser mem = (CustomUser) auth.getPrincipal();
 			mem.setUser(user);
-			return "redirect:/member/myinfo";
+		
 		}else {
-			rttr.addAttribute("status","error");
-			
+			rttr.addAttribute("status","fail");
 		}
-		return "redirect :/member/myinfo";
+		return "redirect:/member/myinfo";
+		
 	}
 	
 	

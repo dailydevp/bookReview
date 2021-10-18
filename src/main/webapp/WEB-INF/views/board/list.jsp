@@ -64,6 +64,7 @@ var usermail = "${pinfo.user.usermail}";
 var bno = "${board.bno }";
 var boardBno = "${board.bno}";
 
+
 $(function() {
 	
 	$("#listPagination a").click(function (e) {
@@ -96,6 +97,7 @@ $(function () {
 <!-- 
  -->
 	<div class="container">
+		<a href="${appRoot}/board/write" class="btn btn-outline-info" role="button" aria-pressed="true" style="float:right;">글 작성</a>
 		<table class="table table-hover">
 		
 		  <thead>
@@ -111,6 +113,7 @@ $(function () {
 		  </thead>
 		
 		  <tbody>
+		
 		  	<c:forEach items = "${list }" var = "board">
 		  		<tr>
 		  			<td>${board.bno }</td>
@@ -136,7 +139,6 @@ $(function () {
 		  			<td>${board.views }</td>
 		  		
 		  			<td>${board.likesCnt }
-		  			
 
 		  			</td>
 		  			
@@ -151,7 +153,7 @@ $(function () {
 		</table>
 
 		
-		
+	
 		<!-- Pagination  -->
 		<nav aria-label="Page navigation example">
 		  <ul id="listPagination" class="pagination justify-content-center">
@@ -176,7 +178,7 @@ $(function () {
 		 	 </ul>
 		</nav>
 		
-			<%-- 페이지 링크용 Form --%>
+	<!-- 		페이지 링크용 Form -->
 			<div style="display: none;">
 				<form id="actionForm" action="${appRoot }/board/list" method="get">
 					<input name="pageNo" value="${cri.pageNo }" />
@@ -186,7 +188,7 @@ $(function () {
 				</form>
 			</div>
 		</div>
-	
+
 	<c:if test="${not empty result }">
 		<div id="board-modal" class="modal" tabindex="-1">
 			<div class="modal-dialog">

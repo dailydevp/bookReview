@@ -24,6 +24,77 @@ img {
     }
 	
 </style>
+						
+<script>
+
+$(document).ready(function(e) {
+	 $("input[type='file']").change(function(e){
+	      //div 내용 비워주기
+	      $('#preview').empty();
+
+	      var files = e.target.files;
+	      var arr =Array.prototype.slice.call(files);
+	      
+	      //업로드 가능 파일인지 체크
+	      for(var i=0;i<files.length;i++){
+	        if(!checkExtension(files[i].name,files[i].size)){
+	          return false;
+	        }
+	      }	      
+	      preview(arr);		
+});
+
+	 function checkExtension(fileName,fileSize){
+
+	      var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	      var maxSize = 20971520;  //20MB
+	      
+	      if(fileSize >= maxSize){
+	        alert('파일 사이즈 초과');
+	        $("input[type='file']").val("");  //파일 초기화
+	        return false;
+	      }
+	      
+	      if(regex.test(fileName)){
+	        alert('업로드 불가능한 파일이 있습니다.');
+	        $("input[type='file']").val("");  //파일 초기화
+	        return false;
+	      }
+	      return true;
+	    }
+	    
+	    function preview(arr){
+	      arr.forEach(function(f){
+        
+	        //파일명이 길면 파일명...으로 처리
+	        var fileName = f.name;
+	        if(fileName.length > 200){
+	          fileName = fileName.substring(0,200)+"...";
+	        }
+
+	        //div에 이미지 추가
+	        var str = '<div style="display: inline-flex; padding: 10px;"><li>';
+	        str += '<span>'+fileName+'</span><br>';
+	        
+	        //이미지 파일 미리보기
+	        if(f.type.match('image.*')){
+	          var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+	          reader.onload = function (e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+	            //str += '<button type="button" class="delBtn" value="'+f.name+'" style="background: red">x</button><br>';
+	            str += '<img src="'+e.target.result+'" title="'+f.name+'" width=200 height=200 />';
+	            str += '</li></div>';
+	            $(str).appendTo('#preview');
+	          } 
+	          reader.readAsDataURL(f);
+	        }else{
+	          str += '<img src="/resources/img/fileImg.png" title="'+f.name+'" width=200 height=200 />';
+	          $(str).appendTo('#preview');
+	        }
+	      });//arr.forEach
+	    }
+	  });
+</script>
+
 
 
 <title> 수정 </title>
@@ -57,16 +128,116 @@ img {
 							</div>
 						</c:if>
 			
-				
-				
-				
+					<div class="form-group">
+									   
+     <input type="text"  id="bookName">
+    <button id="bookSearch" class="btn btn-outline-success">검색</button>
+
+<!--  
+     <p></p>
+ -->
+    <script>
+        $(document).ready(function () {
+            var pageNum = 1;
+            
+            $("#bookSearch").click(function() {
+				$("#exampleModal").modal('show');				
+			})
+
+           $("#bookSearch").click(function () {
+                $("p").html("");
+ 
+                $.ajax({
+                    method: "GET",
+                    url: "https://dapi.kakao.com/v3/search/book?target=title",
+                    data: { query: $("#bookName").val(), page: pageNum},
+                    headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"} 
+ 
+                })
+                .done(function (msg) {
+                    console.log(msg);
+                    for (var i = 0; i < 10; i++){
+                        $("p").append("<h2><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h2>");
+                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
+                        $("p").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
+                    }
+
+                });
+            }) 
+        })
+ 
+  
+    </script>
+
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="book">
+       <!--      <input type="text"  id="bookName">
+ 		   <button id="bookSearch" type="button">검색</button> -->
+		      <p></p>
+		
+		    <script>
+		        $(document).ready(function () {
+		            var pageNum = 1;
+		            
+		  
+		     
+		            $("#bookSearch").click(function () {
+		            
+		                $("p").html("");
+		 
+		                $.ajax({
+		                    method: "GET",
+		                    url: "https://dapi.kakao.com/v3/search/book?target=title",
+		                    data: { query: $("#bookName").val(), page: pageNum},
+		                    headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"} 
+		 
+		                })
+		                .done(function (msg) {
+		                    console.log(msg);
+		                    for (var i = 0; i < 10; i++){
+		                        $("p").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
+		                        $("p").append("<h3><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h3>");
+		                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
+		                    }
+		                });
+		            })
+		        })
+		 
+		  
+		    </script>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+					</div>
 					<div class="form-group">
 						<label for="text"></label>
 						<textarea id="text" class="form-control" name="content" rows="15"> <c:out value="${board.content }"/></textarea>
 					</div>
 					<div class="form-group">
-						<label for="file">파일</label>
-						<input id="file" class="form-control" type="file" name="file" accept="images/*">
+						<input id="uploadFile" type="file" name="file" accept="images/*" multiple="multiple" >
+					</div>
+					<div>
+						<div id="preview"></div>
 					</div>
 					
 					<input hidden name="pageNo" value="${cri.pageNo }" />

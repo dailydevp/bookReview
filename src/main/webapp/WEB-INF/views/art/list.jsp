@@ -113,12 +113,12 @@ td.viewInfo {
 </head>
 <body>
 <div class="container">
-		
+		<a href="${appRoot}/art/write" class="btn btn-outline-info" role="button" aria-pressed="true" style="float:right;">글 작성</a>
 	<table class="table table-hover">
 		<div class="artboardList">
 			<ul class="clearfix"> 
 			  	<c:forEach items = "${list }" var = "artboard">
-			  		<li class="item">
+			  		
 			  				<c:url value="/art/read" var="readUrl">
 			  					<c:param name="bno" value="${artboard.bno }"/>
 			  					<c:param name="pageNo" value="${pageMaker.cri.pageNo }" />
@@ -177,8 +177,8 @@ td.viewInfo {
 			  		<%-- 	<div class="registerDate">			  		
 			  				<fmt:formatDate value="${artboard.regDate }" pattern="yyyy-MM-dd"/>
 			  			</div> --%>
+			  	
 			  	</c:forEach>		
-			  		</li>
 			</ul>
 		</div>
 	</table>

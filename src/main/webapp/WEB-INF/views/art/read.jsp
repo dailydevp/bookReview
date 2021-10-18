@@ -9,11 +9,6 @@
 <html>
 <head>
 
-	 <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=jwwn9kg6n8"></script>
-
 	
 <script src="${appRoot }/resources/js/artRead.js"></script>
 <script type="text/javascript">
@@ -69,7 +64,43 @@ span{
 img {
 	width : 300px;
 }
+.box{
+	justify-content: center;
+	height: 30px;
+	display: flex;
+	cursor: pointer;
+	padding: 20px;
+	background: #fff;
+	border-radius: 30px;
+	align-items: center;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
 
+.box:hover input{
+	margin-top: 15px;
+	width: 100px;
+}
+
+.box input {
+	width: 0;
+	outline: none;
+	border: none;
+	font-weight: 500;
+	transition : 0.8s;
+	background: transparent;
+}
+
+.box button .fas {
+	color: #1daf;
+	font-size: 18px;
+}
+
+#search{
+	margin-top: 15px;
+	outline: none;
+	border: none;
+	background: transparent;
+}
 #galleryName{
 	position : relative;
 	text-align:center;
@@ -145,7 +176,7 @@ img {
 						<input id="title" class="form-control-plaintext" name="title" value="${board.title }" readonly>
 					</div>
 					
-						<input id="galleryName" class="form-control-plaintext" name="galleryName" value="${board.galleryName }" readonly>
+						<input id="galleryName" class="form-control-plaintext" name="galleryName" value="[${board.region }]${board.galleryName }" readonly>
 				
 						<span id = "period" class="form-control-plaintext">${board.startDate } ~  ${board.endDate } </span>
 					
@@ -207,68 +238,76 @@ img {
 					</c:if>
 				</div>
 					<div class="form-group">
-						<label for="text"> </label>
-						<textarea id="text" class="form-control-plaintext" name="content" rows="15" readonly> <c:out value="${board.content }"/> </textarea>
+						<label for="sample5_address"> </label>
+						<textarea id="sample5_address" class="form-control-plaintext" name="content" rows="15" readonly> <c:out value="${board.content }"/> </textarea>
 					</div>
 			</div>
 			
 	
 		<div class="galleryInfo">
-			<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fd156c1a570eab2e059dc842c7970571"></script>
-					<script>
-						var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-						  mapOption = { 
-						        center: new kakao.maps.LatLng(37.54699, 127.09598), // 지도의 중심좌표
-					    	    level: 4 // 지도의 확대 레벨
-					   	 };
-				
-						var map = new kakao.maps.Map(mapContainer, mapOption);
-						
+			<div class="form-group">
+				<label for="address"></label>
+				<input id="address" class="form-control-plaintext" name="address" value="${board.address }"readonly>
+			</div>
+		<div id="map" style="width:350px;height:350px;"></div>
+	
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fd156c1a570eab2e059dc842c7970571&libraries=services"></script>
+	<script>
+	// 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+	var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
-						var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다    
-						    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-						    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨
+	    };
+	
+	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+	var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-						// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-						var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-						    markerPosition = new kakao.maps.LatLng(37.54699, 127.09598); // 마커가 표시될 위치입니다
+	// 장소 검색 객체를 생성합니다
+	var ps = new kakao.maps.services.Places(); 
 
-						// 마커를 생성합니다
-						var marker = new kakao.maps.Marker({
-						  position: markerPosition,
-						  image: markerImage // 마커이미지 설정 
-						});
+	// 키워드로 장소를 검색합니다
+	ps.keywordSearch('${board.address}', placesSearchCB); 
 
-						// 마커가 지도 위에 표시되도록 설정합니다
-						marker.setMap(map);  
+	// 키워드 검색 완료 시 호출되는 콜백함수 입니다
+	function placesSearchCB (data, status, pagination) {
+	    if (status === kakao.maps.services.Status.OK) {
 
-						// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-						var content = '<div class="customoverlay">' +
-						    '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
-						    '    <span class="title">구의야구공원</span>' +
-						    '  </a>' +
-						    '</div>';
+	        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+	        // LatLngBounds 객체에 좌표를 추가합니다
+	        var bounds = new kakao.maps.LatLngBounds();
 
-						// 커스텀 오버레이가 표시될 위치입니다 
-						var position = new kakao.maps.LatLng(37.54699, 127.09598);  
+	        for (var i=0; i<data.length; i++) {
+	            displayMarker(data[i]);    
+	            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+	        }       
 
-						// 커스텀 오버레이를 생성합니다
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    map: map,
-						    position: position,
-						    content: content,
-						    yAnchor: 1 
-						});
-				
-					</script>
-			
-			
-			</script>
+	        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+	        map.setBounds(bounds);
+	    } 
+	}
 
-			<h5>${board.galleryName } </h5>
-			<p>"${board.address }"</p>
-			
-			<a href="https://www.pkmgallery.com/">https://www.pkmgallery.com/</a>
+	// 지도에 마커를 표시하는 함수입니다
+	function displayMarker(place) {
+	    
+	    // 마커를 생성하고 지도에 표시합니다
+	    var marker = new kakao.maps.Marker({
+	        map: map,
+	        position: new kakao.maps.LatLng(place.y, place.x) 
+	    });
+
+	    // 마커에 클릭이벤트를 등록합니다
+	    kakao.maps.event.addListener(marker, 'click', function() {
+	        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+	        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+	        infowindow.open(map, marker);
+	    });
+	}
+	
+	</script>
+		
 		</div>
 
 		

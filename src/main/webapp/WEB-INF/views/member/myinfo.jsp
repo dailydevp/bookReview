@@ -60,7 +60,43 @@
 *:focus {
     outline: none;
 }
+.box{
+	justify-content: center;
+	height: 30px;
+	display: flex;
+	cursor: pointer;
+	padding: 20px;
+	background: #fff;
+	border-radius: 30px;
+	align-items: center;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
 
+.box:hover input{
+	margin-top: 15px;
+	width: 100px;
+}
+
+.box input {
+	width: 0;
+	outline: none;
+	border: none;
+	font-weight: 500;
+	transition : 0.8s;
+	background: transparent;
+}
+
+.box button .fas {
+	color: #1daf;
+	font-size: 18px;
+}
+
+#search{
+	margin-top: 15px;
+	outline: none;
+	border: none;
+	background: transparent;
+}
 
 
 
@@ -100,7 +136,7 @@ $(function() {
 			var newPw = $("#newPw").val();
 			var newPwCheck = $("#newPwCheck").val();
 			var regpw = /(?=.*?[#?!@$%^&*-])(?=.*[a-z])(?=.*[A-Z]).{8}/;
-			var modifyBtn = $("#updatePw");
+			var modifyBtn = $("#changePwBtn");
 			passwordConfirm = false;
 			
 			if(newPw == ""){
@@ -109,8 +145,10 @@ $(function() {
 			} else {
 				if(newPw != newPwCheck){
 					$("#member-info-password-message").text("비밀번호가 일치하지 않습니다.");
+					modifyBtn.attr("disabled", "disabled");
 				}else if(!regpw.test(newPw)){
 					$("#member-info-password-message").text("숫자+대소문자+특수문자 포함 8자리 이상 조합으로 설정해주세요.")
+					modifyBtn.attr("disabled", "disabled");
 				}else{
 				modifyBtn.removeAttr("disabled");
 				$("#member-info-password-message").empty();
@@ -159,7 +197,7 @@ $(function() {
 
 	<c:if test="${param.status == 'success' }">
 		<script>
-	 		alert('회원정보 수정이 완료되었습니다.')
+	 		alert('회원 정보 수정이 완료되었습니다.')
 		</script>	
 	</c:if>
 	
@@ -169,6 +207,14 @@ $(function() {
 			alert('회원 정보 수정을 할 수 없습니다.')
 		</script>	
 	</c:if>
+	
+	
+	<c:if test="${param.status == 'ok' }">
+		<script>
+	 		alert('비밀번호 변경에 성공했습니다.')
+		</script>	
+	</c:if>
+	
 
 	<c:if test="${param.status == 'fail' }">
 		<script>
@@ -265,89 +311,7 @@ $(function() {
 							회원탈퇴
 						</button>
 					    </div>
-					  
-				
-				
-				
-			
-							
-							
-							<!-- 비밀번호 수정 모달창 -->
-								
-					<!-- 			
-							
-								<div class="modal fade" id="changePwModal" tabindex="-1" aria-labelledby="changePassword" aria-hidden="true">
-								  <div class="modal-dialog">
-								    <div class="modal-content" style="width: 358px;">
-								      <div class="modal-header">
-								        <h5 class="modal-title" id="changePassword">비밀번호 수정</h5>
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								          <span aria-hidden="true">&times;</span>
-								        </button>
-								      </div>
-								      <div class="modal-body">
-									 
-											  <div class="mb-2 row">
-											    <label for="newPw" class="col-sm-5 col-form-label" style="padding-left : 30px;">새 비밀번호</label>
-											 </div>
-											    <div class="col-sm-10 input-group">
-											   	 <input form="memberInfoForm" type="password" class="form-control" id="newPw" name="userpw">	
-											   	   <div class="input-group-append">		
-											   	   <button class="btn btn-outline-secondary" type="button" id="toggle-password-btn">
-													<i id="toggle-password-icon" class = "far fa-eye"></i>
-													</button>
-											      </div>			
-											  </div>
-											  <div class="mb-2 row">
-											   <label for="newPw" class="col-sm-6 col-form-label" style="padding-left : 30px;">새 비밀번호 확인</label>
-											  </div>
-											   	  <div class="col-sm-10 input-group">
-											    	<input type="password" class="form-control" id="newPwCheck" >		
-											    	 	<div class="input-group-append">		
-													   	   <button class="btn btn-outline-secondary" type="button" id="toggle-password-btn2">
-															<i id="toggle-password-icon" class = "far fa-eye"></i>
-															</button>
-													      </div>
-													
-											      </div>				
-											    	 <small id="member-info-password-message" class="form-text text-danger"></small>
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-								        <button type="submit" name="updatePw" id="updatePw" class="btn btn-primary">변경하기</button>
-								      </div>
-								    </div>
-								  </div>
-								</div> -->
-						
-								
-								 			 <!-- 회원탈퇴 모달창 -->
-						<!-- 		
-								<div class="modal fade" id="deleteMem" tabindex="-1" aria-labelledby="deleteMem" aria-hidden="true">
-								  <div class="modal-dialog">
-								    <div class="modal-content">
-								      <div class="modal-header">
-								        <h5 class="modal-title">회원탈퇴</h5>
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								          <span aria-hidden="true">&times;</span>
-								        </button>
-								      </div>
-								      <div class="modal-body">				       
-											  <div class="modalDelete">
-											    <label for="ex-Password">기존 비밀번호</label>
-											    <input form="memberInfoForm" type="password" class="form-control" id="ex-Password" name="oldPassword" aria-describedby="oldPassword">									   
-											    <small class="form-text text-danger">*현재 회원탈퇴 페이지입니다. 신중하게 결정하세요.</small>
-											  </div>										
-								      </div>
-								      <div class="modal-footer">
-								        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-								        <button type="submit" id="modaldeleteBtn" class="btn btn-danger">탈퇴</button>
-								      </div>
-								    </div>
-								  </div>
-								</div>
-								 -->
-							<!-- Modal 	-->
+
 					<%-- 기존 패스워드 입력 모달 --%>
 			<div class="modal fade" id="originPwCheck" >
 				<div class="modal-dialog">
@@ -382,19 +346,8 @@ $(function() {
 					</div>
 				</div>
 			</div>	
-								
-								
-								
-								
-								
-						 
-					</div>
-				     
-		
-			 
+		</div>
 
-							
-	
 </div>
 </body>
 </html>

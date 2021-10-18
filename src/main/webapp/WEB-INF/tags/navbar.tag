@@ -40,9 +40,7 @@
 	          <a class="nav-link" href="${appRoot }/board/list">BOOK</a>
 	          <a class="nav-link" href="${appRoot }/art/list">ART</a>
 	   
-	          <sec:authorize access="isAuthenticated()">
-	          <a class="nav-link" href="${appRoot }/board/write">글 작성하기</a>
-	          </sec:authorize>
+
 	      
 	      <div class="box">
 	        <form class="d-flex">
@@ -62,6 +60,9 @@
 	      </div>
 	</ul>
 </nav>
+
+
+
 
 
 

@@ -87,9 +87,13 @@ public class ArtBoardController {
 	@RequestMapping({"/read" , "/modify"})
 	public void read(@RequestParam("bno")Long bno, @ModelAttribute("cri") Criteria cri, Model model, Principal principal) {
 		log.info("artboard read! 읽기");
+		log.info(model);
 		
 		ArtBoardVO vo = service.read(bno);
 
+		model.addAttribute("users" , vo);
+		
+		log.info(principal);
 		
 		//좋아요
 		if (principal != null) {
@@ -98,6 +102,7 @@ public class ArtBoardController {
 			if (one.equals(likeClicked)) {
 				vo.setLikeClicked(true);
 				log.info(vo);
+				service.likes(bno);			
 			}
 		}
 		

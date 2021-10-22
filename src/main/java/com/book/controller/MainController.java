@@ -45,10 +45,11 @@ public class MainController {
 	@GetMapping("/home")
 	public void home(@ModelAttribute("cri")Criteria cri, Model model, Principal principal) {
 		int total = service.getTotal(cri);
-		
 		List<BookBoardVO> list = service.getList(cri);
 		
 		model.addAttribute("list" , list);
 		model.addAttribute("pageMaker" , new PageDTO(cri, total));
+		log.info(model);
+		log.info(principal);
 	}
 }

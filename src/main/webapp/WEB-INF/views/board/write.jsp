@@ -72,6 +72,10 @@ boder : solid 1px pink;
 <script>
 
 $(function() {
+	
+	$("#writeBtn").click(function(e) {
+		e.preventDefault();
+	})
 
 	$("#title","#content").keyup(function() {
 		

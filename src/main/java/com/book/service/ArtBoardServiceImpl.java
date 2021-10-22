@@ -178,5 +178,10 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 	public int views(Long bno) {
 		return mapper.views(bno);
 	}
+	
+	@Override
+	public int likes(Long bno) {
+		return mapper.likes(bno);
+	}
 
 }

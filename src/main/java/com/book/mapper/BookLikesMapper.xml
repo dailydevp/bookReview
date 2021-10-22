@@ -27,7 +27,7 @@
  			and bno = #{bno}
  	</select>
  	
- 	<update id = "update">
+ 	<update id="update">
  		UPDATE b_likes
  		SET lno = IF(lno = 0, 1, 0)
  		WHERE usermail=#{usermail} and bno = #{bno}

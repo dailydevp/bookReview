@@ -108,7 +108,7 @@ $(function() {
 				
 					<div class="form-group">
 						<label for="gallery"></label>
-						<input id="gallery" class="form-control" name="galleryName" placeholder="갤러리">
+						<input id="gallery" class="form-control" name="galleryName" onclick=""placeholder="갤러리">
 					</div>
 				
 					<div class="form-group">
@@ -177,12 +177,12 @@ $(function() {
 			                        // 해당 주소에 대한 좌표를 받아서
 			                        var coords = new daum.maps.LatLng(result.y, result.x);
 			                        // 지도를 보여준다.
-			                        mapContainer.style.display = "block";
-			                        map.relayout();
+			                        mapContainer.style.display = "none";
+			               /*          map.relayout();
 			                        // 지도 중심을 변경한다.
 			                        map.setCenter(coords);
 			                        // 마커를 결과값으로 받은 위치로 옮긴다.
-			                        marker.setPosition(coords)
+			                        marker.setPosition(coords) */
 			                    }
 			                });
 			            }

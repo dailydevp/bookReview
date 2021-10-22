@@ -89,16 +89,20 @@ public class BookBoardServiceImpl implements BookBoardSerive{
 	
 	@Override
 	@Transactional
-	public void write(BookBoardVO board, MultipartFile file) {
+	public void write(BookBoardVO board, MultipartFile[] mfile) {
 		write(board);
 		
-		if (file != null && file.getSize()>0) {
-			FileVO vo = new FileVO();
-			vo.setBno(board.getBno());
-			vo.setFileName(file.getOriginalFilename());
+		for(MultipartFile file : mfile) {
 			
-			fileMapper.insert(vo);
-			upload(board,file);
+			
+			if (file != null && file.getSize()>0) {
+				FileVO vo = new FileVO();
+				vo.setBno(board.getBno());
+				vo.setFileName(file.getOriginalFilename());
+				
+				fileMapper.insert(vo);
+				upload(board,file);
+			}
 		}
 		
 	}
@@ -128,19 +132,24 @@ public class BookBoardServiceImpl implements BookBoardSerive{
 
 	@Override
 	@Transactional
-	public boolean modify(BookBoardVO board, MultipartFile file) {
+	public boolean modify(BookBoardVO board, MultipartFile[] mfile) {
+		
+		BookBoardVO exBoard = mapper.read(board.getBno());
+		deleteFile(exBoard);
+		
+		fileMapper.deleteByBno(board.getBno());
+		
+		for(MultipartFile file : mfile) {
 		
 		if(file !=null & file.getSize() > 0) {
-			BookBoardVO exBoard = mapper.read(board.getBno());
-			deleteFile(exBoard);
 			upload(board, file);
 			
-			fileMapper.deleteByBno(board.getBno());
 			
 			FileVO vo = new FileVO();
 			vo.setBno(board.getBno());
 			vo.setFileName(file.getOriginalFilename());
 			fileMapper.insert(vo);
+			}
 		}
 		return modify(board);
 	}

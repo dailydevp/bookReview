@@ -35,6 +35,7 @@
  			b.views views,
  			b.likes likes,
  			f.fileName fileName,
+ 			m.fileName profile,
  			m.nick writerName,
  		--	count(r.bno) replyCnt,
  		--	sum(l.lno) likesCnt
@@ -67,6 +68,7 @@
  			b.views views,
  			b.likes likes,
  			m.nick writerName,
+ 			m.fileName profile,
  			f.fileName fileName,
  		-- count(r.rno) replyCnt,
  		-- sum(l.lno) likesCnt
@@ -103,7 +105,7 @@
  		(#{categorie}, #{title},#{content},#{writer}, #{views})
  	</insert>
  	
- 	<select id="read" resultType="com.book.domain.BookBoardVO">
+ 	<select id="read" resultMap="bookMapper">
  		SELECT
  			b.bno bno,
  			b.categorie categorie,
@@ -112,12 +114,34 @@
  			b.writer writer,
  			b.regDate regDate,
  			b.updateDate updateDate,
+ 			b.likes likes,
+ 			b.views views,
  			f.fileName fileName,
- 			m.nick writerName
+ 			m.nick writerName,
+ 			m.fileName profile
  		FROM b_board b LEFT JOIN b_file f ON b.bno = f.bno
  						JOIN member m ON b.writer = m.usermail
  		WHERE b.bno = #{bno}
  	</select>
+ 	
+ 	<resultMap type="com.book.domain.BookBoardVO" id="bookMapper">
+	 	<id property="bno" column="bno"/>
+	 	<result property="categorie" column="categorie"/>
+	 	<result property="title" column="title"/>
+	 	<result property="content" column="content"/>
+	 	<result property="writer" column="writer"/>
+	 	<result property="regDate" column="regDate"/>
+	 	<result property="updateDate" column="updateDate"/>
+	 	<result property="likes" column="likes"/>
+	 	<result property="views" column="views"/>
+	 	<result property="writerName" column="writerName"/>
+	 	<result property="profile" column="profile"/>
+	 	<collection property="fileName" resultMap="fileNameMapper"></collection>
+ 	</resultMap>
+ 	
+ 	<resultMap type="string" id="fileNameMapper">
+ 		<result property="fileName" column="fileName"/>
+ 	</resultMap>
  
  	<delete id="delete">
  		DELETE 
@@ -129,6 +153,7 @@
  		UPDATE 
  		b_board
  		SET
+ 			categorie = #{categorie},
  			title = #{title},
  			content = #{content},
  			writer = #{writer},

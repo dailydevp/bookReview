@@ -124,7 +124,8 @@
 	 		a.startDate startDate,
 	 		a.endDate endDate,
 	 		f.fileName fileName,
-	 		m.nick writerName
+	 		m.nick writerName,
+	 		m.fileName profile
 	 	FROM a_board a LEFT JOIN a_file f ON a.bno = f.bno
  						JOIN member m ON a.writer = m.usermail
  		WHERE a.bno = #{bno}
@@ -166,6 +167,12 @@
  		UPDATE a_board 
  		SET views = views + 1
  		WHERE bno = #{bno}
+ 	</update>
+ 	
+ 	<update id="likes">
+ 		UPDATE a_board
+ 		SET likes = likes + 1
+ 		WHERE bno=#{bno}
  	</update>
  
  </mapper>

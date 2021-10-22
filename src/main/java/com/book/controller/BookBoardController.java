@@ -66,7 +66,7 @@ public class BookBoardController {
 			for (BookBoardVO vo : list) {
 				if(likesList.contains(vo.getBno())) {
 				log.info(vo);
-				vo.setClicked(true);
+				vo.setGetLikeClick(true);
 			
 			}
 		}
@@ -82,11 +82,9 @@ public class BookBoardController {
 	
 	@PostMapping("/write")
 	@PreAuthorize("isAuthenticated()")
-	public String write(BookBoardVO board, @RequestParam("file") MultipartFile file, RedirectAttributes rttr) {
+	public String write(BookBoardVO board, @RequestParam("file") MultipartFile[] file, RedirectAttributes rttr) {
 		log.info("책 글작성");
-		
-		board.setFileName(file.getOriginalFilename());
-		
+
 		service.write(board, file);
 		
 		rttr.addFlashAttribute("result", board.getBno());
@@ -102,11 +100,12 @@ public class BookBoardController {
 	public void read(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model, Principal principal) {
 		log.info("board read! 읽기");
 		log.info(bno);
+		log.info(model);
 
 		
 		BookBoardVO vo = service.read(bno);
 		
-		model.addAttribute("users" , vo);
+		model.addAttribute("book" , vo);
 		
 		log.info(principal);
 		
@@ -114,7 +113,7 @@ public class BookBoardController {
 			Long Clicked = lservice.getLikeClick(principal.getName(), vo.getBno());
 			Long one = 1L;
 			if(one.equals(Clicked)) {
-				vo.setClicked(true);
+				vo.setGetLikeClick(true);
 				log.info(vo);
 				service.likes(bno);
 			}
@@ -129,7 +128,7 @@ public class BookBoardController {
 
 	@PostMapping("/modify")
 	@PreAuthorize("principal.username == #board.writer")
-	public String modify(BookBoardVO board, Criteria cri, @RequestParam("file") MultipartFile file, RedirectAttributes rttr) {
+	public String modify(BookBoardVO board, Criteria cri, @RequestParam("file") MultipartFile[] file, RedirectAttributes rttr) {
 		log.info("board_수정페이지!");
 
 		

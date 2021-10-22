@@ -107,6 +107,13 @@ $(document).ready(function(e) {
 					<div class="form-group">
 						<form id="modifyForm" action="${appRoot }/board/modify" method="post" enctype="multipart/form-data">
 						<input hidden name="bno" value="${board.bno }">
+					<div class="form-group">
+					    <label for="categories"></label>
+					      <select class="form-control" id="categories" name ="categorie" style="width : 120px;">    
+					      	<option>ART</option>   
+					      	<option>BOOK</option>
+					      </select>
+					  </div>
 					<div class="header-info">
 						<label for="title"></label>
 						<input id="title" class="form-control" name="title" value="${board.title }" style="border:0 solid black;  outline: none;" >
@@ -120,22 +127,32 @@ $(document).ready(function(e) {
 					
 					</div>
 				
-				
-						<c:if test="${not empty board.fileName }">
-							<div>
-								<img class="img-fluid" 
-								src="${imgRoot}${board.bno }/${board.fileName}">
-							</div>
-						</c:if>
-			
+					
 					<div class="form-group">
-									   
+						<c:if test="${not empty board.fileName }">
+							<c:forEach items="${board.fileName }" var="imgs">
+								<span class="photoInfo">
+									<img class="img-fluid"
+									src ="${imgRoot}book/${board.bno }/${imgs}">
+								</span>
+							</c:forEach>
+						</c:if>
+					</div>
+
+    
+
+
+
+
+								
+					<div class="form-group">
+<!-- 									   
      <input type="text"  id="bookName">
     <button id="bookSearch" class="btn btn-outline-success">검색</button>
-
-<!--  
-     <p></p>
  -->
+  
+     <p></p>
+ 
     <script>
         $(document).ready(function () {
             var pageNum = 1;
@@ -144,7 +161,7 @@ $(document).ready(function(e) {
 				$("#exampleModal").modal('show');				
 			})
 
-           $("#bookSearch").click(function () {
+           $("#bookSearch").click(function (e) {
                 $("p").html("");
  
                 $.ajax({
@@ -171,9 +188,7 @@ $(document).ready(function(e) {
 
 </div>
 
-
-
-
+			
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -214,6 +229,7 @@ $(document).ready(function(e) {
 		                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
 		                    }
 		                });
+		                
 		            })
 		        })
 		 
@@ -226,15 +242,67 @@ $(document).ready(function(e) {
       </div>
     </div>
   </div>
-</div>
+</div>		
 	
 					</div>
+					
+													
+					<div class="form-group">
+
+ 
+ 			<input type="text"  id="bookName">
+    		<button id="bookSearch" class="btn btn-outline-success">검색</button>
+			
+			
+  
+     <p></p>
+ 
+    <script>
+        $(document).ready(function () {
+            var pageNum = 1;
+            
+            $("#bookSearch").click(function() {
+				$("#exampleModal").modal('show');				
+			})
+
+           $("#bookSearch").click(function (e) {
+                $("p").html("");
+ 
+                $.ajax({
+                    method: "GET",
+                    url: "https://dapi.kakao.com/v3/search/book?target=title",
+                    data: { query: $("#bookName").val(), page: pageNum},
+                    headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"} 
+ 
+                })
+                .done(function (msg) {
+                    console.log(msg);
+                    for (var i = 0; i < 10; i++){
+                        $("p").append("<h2><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h2>");
+                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
+                        $("p").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
+                    }
+
+                });
+            }) 
+        })
+ 
+  
+    </script>
+
+</div>
+					
+					
+					
+					
 					<div class="form-group">
 						<label for="text"></label>
 						<textarea id="text" class="form-control" name="content" rows="15"> <c:out value="${board.content }"/></textarea>
 					</div>
 					<div class="form-group">
-						<input id="uploadFile" type="file" name="file" accept="images/*" multiple="multiple" >
+					<input id="uploadFile" type="file" name="file" accept="images/*" multiple="multiple">
+
+				
 					</div>
 					<div>
 						<div id="preview"></div>
@@ -258,9 +326,9 @@ $(document).ready(function(e) {
 					
 					
 					
-					<input class="btn btn-warning" type="submit" value="수정">
 					
 					</form>
+					<input class="btn btn-warning" type="submit" value="수정">
 					</div>	
 				</div>
 			</div>

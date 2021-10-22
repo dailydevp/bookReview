@@ -19,7 +19,7 @@ var likes = "${board.likesCnt }";
 var boardlike = "${board.likes }";
 var boardlike2 = "${board.likesCnt }";
 var bb = "${board.views }";
-var filesss = "${imgRoot}book/${board.bno }/${mfile}"
+var filesss = "${imgRoot}book/${board.bno }/${board.fileName}";
 </script>
 
 <style>
@@ -171,10 +171,11 @@ img {
 				<div class="title_form">
 				<form id="readForm" action="${appRoot }/board/read" method="post" enctype="multipart/form-data">
 					<input hidden name="bno" value="${board.bno }">
+					<input hidden name="fileName" value="${board.fileName }">
 					<div class="header-info">
 						<label for="title"></label>
 						<input id="title" class="form-control-plaintext" name="title" value="${board.title }" readonly>
-						<input name="reply" id="replyeCnt" class="form-control-plaintext" value="${board.likesCnt }">
+						<input name="reply" id="replyeCnt" class="form-control-plaintext">
 					</div>
 						<div class="form-group">
 							<div class="articleInfo">
@@ -182,12 +183,12 @@ img {
 								
 										    
 							<img id="profile"
-								 <c:if test="${empty vo.fileName }">
+								 <c:if test="${empty board.profile }">
 						    	 	 src="${profile }basicProfile/basicImage.png"
 						    	  </c:if>
 								
-								<c:if test="${not empty vo.fileName }">
-									src="${profile }${board.writer }/${vo.fileName }"
+								<c:if test="${not empty board.profile }">
+									src="${profile }${board.writer }/${board.profile }"
 								</c:if>
 							>
 		
@@ -195,9 +196,8 @@ img {
 									<a href="${appRoot }/member/myinfo"><span>${board.writerName }</span></a>
 										<span class="regdate">
 											<fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd HH:mm"/>
-										</span>			
-										
-													
+										</span>		
+						
 	
 										
 										<span class="modeForm">
@@ -226,9 +226,7 @@ img {
 													<input type="submit" id="delete" onclick="deleteCheck()" value="삭제" >
 												</c:if>
 											</ul>
-										</span>																				
-									</span>						
-				</form>
+										</span>																													
 								</div>
 							</div>							
 						</div>		
@@ -241,16 +239,16 @@ img {
 		
 				<div class="photoZone">
 					<c:if test="${not empty board.fileName }">
-						<c:forEach items="${board.fileName }" var="mfile">
-							<div class="photoInfo">
+						<c:forEach items="${board.fileName }" var="imgs">
+							<span class="photoInfo">
 								<img class="img-fluid"
-								src ="${imgRoot}book/${board.bno }/${file}">
-							</div>
+								src ="${imgRoot}book/${board.bno }/${imgs}">
+							</span>
 						</c:forEach>
 					</c:if>
 				</div>
-			<div class="writerInfo">
-					
+									</form>
+		
 					
 			<div class="form-group">
 				<label for="text"> </label>
@@ -260,29 +258,26 @@ img {
 		
 			<div class="form-group">		
 
-				<div class="replys"><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong></div>
+				<i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong>
 			
 				<button id="likes" >
 					<c:choose>
-						<c:when test="${!board.clicked}">
+						<c:when test="${!board.getLikeClick}">
 						<span class="likesBtn">
 							<i class="far fa-heart"></i>
 						</span>
-							<input type="hidden" class="likesCheck" value="${lno }">
+							<input type="hidden" value="${lno }">
 						</c:when>					
-						<c:when test="${board.clicked}">
+						<c:when test="${board.getLikeClick}">
 						<span class="likesBtn">
 							<i class="fas fa-heart"></i>
 						</span>
-							<input type="hidden" class="likesCheck" value="${lno }">
+							<input type="hidden" value="${lno }">
 						</c:when>					
 					</c:choose>
 				좋아요&nbsp;<strong>${board.likesCnt }</strong></button>		
 			</div>
-		
-				
-			</div>
-		
+
 			<br>
 			<hr>
 		
@@ -347,7 +342,7 @@ img {
 </div>
         
  				
-			</div>
+		
 	</div>
 </div>
 </body>

@@ -1,6 +1,7 @@
 package com.book.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -18,14 +19,15 @@ public class BookBoardVO {
 	private Date updateDate;
 	private boolean likes;
 	private int views;
+	private String profile;
 	
 
-	private boolean clicked;
+	private boolean getLikeClick;
 	
 	private int replyCnt;
 	private int likesCnt;
 	
-	private String fileName;
+	private List<String> fileName;
 
 
 

@@ -17,11 +17,11 @@ public interface BookBoardSerive {
 	
 	public void write(BookBoardVO board);
 	
-	public void write(BookBoardVO board, MultipartFile file);
+	public void write(BookBoardVO board, MultipartFile[] files);
 	
 	public boolean modify(BookBoardVO board);
 	
-	public boolean modify(BookBoardVO board, MultipartFile file);
+	public boolean modify(BookBoardVO board, MultipartFile[] files);
 	
 	public boolean delete(Long bno);
 	

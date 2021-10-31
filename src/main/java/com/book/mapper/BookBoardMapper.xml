@@ -106,7 +106,7 @@
  	</insert>
  	
  	<select id="read" resultMap="bookMapper">
- 		SELECT
+ 		SELECT 
  			b.bno bno,
  			b.categorie categorie,
  			b.title title,
@@ -114,14 +114,23 @@
  			b.writer writer,
  			b.regDate regDate,
  			b.updateDate updateDate,
- 			b.likes likes,
  			b.views views,
+ 			b.likes likes,
  			f.fileName fileName,
+ 			m.fileName profile,
  			m.nick writerName,
- 			m.fileName profile
- 		FROM b_board b LEFT JOIN b_file f ON b.bno = f.bno
- 						JOIN member m ON b.writer = m.usermail
+ 		--	count reply
+ 			(SELECT COUNT(*) FROM b_reply r WHERE r.bno = b.bno) AS replyCnt,
+ 			
+ 		--	sum likes
+ 			(SELECT IFNULL(SUM(l.lno), 0) FROM b_likes l WHERE l.bno = b.bno) AS likesCnt
+ 		FROM b_board  b
+ 				LEFT JOIN b_file f ON b.bno = f.bno
+ 					 JOIN member m ON b.writer = m.usermail
+ 			--	LEFT JOIN b_reply r ON b.bno = r.bno
+ 			--	LEFT JOIN b_likes l ON b.bno = l.bno
  		WHERE b.bno = #{bno}
+
  	</select>
  	
  	<resultMap type="com.book.domain.BookBoardVO" id="bookMapper">
@@ -136,6 +145,7 @@
 	 	<result property="views" column="views"/>
 	 	<result property="writerName" column="writerName"/>
 	 	<result property="profile" column="profile"/>
+	 	
 	 	<collection property="fileName" resultMap="fileNameMapper"></collection>
  	</resultMap>
  	
@@ -164,7 +174,6 @@
  	
  	<select id="getTotalCount" resultType="int">
  		SELECT COUNT(*) FROM b_board b
- 	
  	<include refid="criteria"></include>
  	</select>
  	

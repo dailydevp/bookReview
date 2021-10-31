@@ -10,7 +10,7 @@
 <style>
 
 img {
-	width : 300px;
+	width : px;
 	}
 	
 	
@@ -93,6 +93,37 @@ $(document).ready(function(e) {
 	      });//arr.forEach
 	    }
 	  });
+	  
+	  
+	  $(function() {
+			$("#title").click(function(e) {
+				
+				e.preventDefault();
+					  $.ajax({
+						  method: "GET",
+						  url:"https://dapi.kakao.com/v3/search/book?target=title",
+				          headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"},
+				          data: { 
+				        	  query: $("#title").val()
+				        	  }
+					  })
+					  .done(function(info) {
+						console.log(info);
+						if(info != null){
+							$("#coverimg").append("<img src='" + info.documents[0].thumbnail + "'/><br>");
+							$("h5").append(info.documents[0].title);
+							$(".card-text").append(info.documents[0].contents);
+							$(".card-author").append(info.documents[0].authors);
+						}else{
+							alert("정보이미등록되잇슈");
+						}
+							});							
+				
+
+		});	
+	});
+	
+	 
 </script>
 
 
@@ -109,8 +140,7 @@ $(document).ready(function(e) {
 						<input hidden name="bno" value="${board.bno }">
 					<div class="form-group">
 					    <label for="categories"></label>
-					      <select class="form-control" id="categories" name ="categorie" style="width : 120px;">    
-					      	<option>ART</option>   
+					      <select class="form-control" id="categories" name ="categorie" style="width : 120px;" hidden>    
 					      	<option>BOOK</option>
 					      </select>
 					  </div>
@@ -118,9 +148,7 @@ $(document).ready(function(e) {
 						<label for="title"></label>
 						<input id="title" class="form-control" name="title" value="${board.title }" style="border:0 solid black;  outline: none;" >
 					</div>
-					
-					<hr>
-					
+					<hr>		
 					<div class="form-group">
 						<label for="writer"></label>
 						<input id="writer" class="form-control" type="hidden" name="writer" value="${board.writer }" >
@@ -141,27 +169,30 @@ $(document).ready(function(e) {
 
     
 
-
-
-
+<!-- 
 								
-					<div class="form-group">
-<!-- 									   
+					<div <!-- class="form-group">
+									   
      <input type="text"  id="bookName">
     <button id="bookSearch" class="btn btn-outline-success">검색</button>
- -->
+
   
-     <p></p>
- 
+	    
+			  
+			  </div>
+		</div>
+
     <script>
         $(document).ready(function () {
             var pageNum = 1;
             
-            $("#bookSearch").click(function() {
+            $("#bookSearch").click(function(e) {
+            	e.preventDefault();
 				$("#exampleModal").modal('show');				
 			})
 
            $("#bookSearch").click(function (e) {
+        	   
                 $("p").html("");
  
                 $.ajax({
@@ -173,37 +204,36 @@ $(document).ready(function(e) {
                 })
                 .done(function (msg) {
                     console.log(msg);
-                    for (var i = 0; i < 10; i++){
-                        $("p").append("<h2><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h2>");
-                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
-                        $("p").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
-                    }
-
+                 
+                    for (var i = 0; i < documents.length; i++){
+                        $("a").append("<h2><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h2>");
+                        $("a").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
+                        $("a").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
+ 
+			                   }			
                 });
             }) 
         })
  
   
-    </script>
+  </script> 
 
 </div>
 
-			
-<!-- Modal -->
+Modal
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+     	   <span aria-hidden="true">&times;</span> 
         </button>
       </div>
       <div class="book">
-       <!--      <input type="text"  id="bookName">
- 		   <button id="bookSearch" type="button">검색</button> -->
-		      <p></p>
-		
+      	<div>
+		      <span></span>
+			</div>
 		    <script>
 		        $(document).ready(function () {
 		            var pageNum = 1;
@@ -212,8 +242,8 @@ $(document).ready(function(e) {
 		     
 		            $("#bookSearch").click(function () {
 		            
-		                $("p").html("");
-		 
+		                 $("span").html("");
+		  
 		                $.ajax({
 		                    method: "GET",
 		                    url: "https://dapi.kakao.com/v3/search/book?target=title",
@@ -224,17 +254,17 @@ $(document).ready(function(e) {
 		                .done(function (msg) {
 		                    console.log(msg);
 		                    for (var i = 0; i < 10; i++){
-		                        $("p").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
-		                        $("p").append("<h3><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h3>");
-		                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
+		                        $("span").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
+		                        $("span").append("<h3><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h3>");
+		                        $("span").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
 		                    }
 		                });
 		                
 		            })
 		        })
 		 
-		  
-		    </script>
+
+		    </script> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -244,7 +274,7 @@ $(document).ready(function(e) {
   </div>
 </div>		
 	
-					</div>
+			
 					
 													
 					<div class="form-group">
@@ -255,13 +285,14 @@ $(document).ready(function(e) {
 			
 			
   
-     <p></p>
- 
+      <p></p>
+  
     <script>
         $(document).ready(function () {
             var pageNum = 1;
             
-            $("#bookSearch").click(function() {
+            $("#bookSearch").click(function(e) {
+            	e.preventDefault();
 				$("#exampleModal").modal('show');				
 			})
 
@@ -288,16 +319,33 @@ $(document).ready(function(e) {
         })
  
   
-    </script>
-
+    </scri
 </div>
 					
-					
-					
+		
+					 -->
+				
 					
 					<div class="form-group">
+						<div class="card mb-3" style="max-width: 60%; border: none;">
+							<div class="row g-0">
+								<div class="col-md-4" id="coverimg"></div> 
+								<div class="col-md-8">
+									<div class="card-body">
+										<h5 class="card-title"></h5>
+										<p class="card-author"></p>
+										<p class="card-text"></p>
+									</div>
+								</div>
+							
+							</div>
+						</div>
+						
+						<hr>
 						<label for="text"></label>
 						<textarea id="text" class="form-control" name="content" rows="15"> <c:out value="${board.content }"/></textarea>
+						
+						
 					</div>
 					<div class="form-group">
 					<input id="uploadFile" type="file" name="file" accept="images/*" multiple="multiple">
@@ -323,15 +371,12 @@ $(document).ready(function(e) {
 							<c:param name="keyword" value="${cri.keyword }"></c:param>
 							<c:param name="type" value="${cri.type }"></c:param>
 					</c:url>
-					
-					
-					
-					
-					</form>
+
 					<input class="btn btn-warning" type="submit" value="수정">
+					</form>
 					</div>	
 				</div>
 			</div>
-
+		</div>
 </body>
 </html>

@@ -11,6 +11,7 @@ public class BookBoardVO {
 	private Long bno;
 	private String categorie;
 //	private String subCategorie;
+	private String author;
 	private String title;
 	private String content;
 	private String writer;

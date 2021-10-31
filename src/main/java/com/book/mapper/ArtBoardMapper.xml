@@ -36,9 +36,9 @@
  			a.galleryName galleryName,
 	 		a.startDate startDate,
 	 		a.endDate endDate,
-	 		a.likes likes,
 	 		a.views views,
  			m.nick writerName,
+ 			m.fileName profile,
  			f.fileName fileName,
  		-- count(r.rno) replyCnt
  		-- sum(l.lno) likesCnt
@@ -72,9 +72,9 @@
  			a.galleryName galleryName,
 	 		a.startDate startDate,
 	 		a.endDate endDate,
-	 		a.likes likes,
 	 		a.views views,
  			m.nick writerName,
+ 			m.fileName profile,
  			f.fileName fileName,
  		-- count(r.rno) replyCnt
  		-- sum(l.lno) likesCnt
@@ -111,25 +111,57 @@
  		(#{categorie},#{region},#{title},#{content},#{address},#{writer},#{galleryName},#{startDate},#{endDate})
  	</insert>
  	
- 	<select id="read" resultType="com.book.domain.ArtBoardVO">
-	 	SELECT
-	 		a.bno bno,
-	 		a.categorie categorie,
+ 	<select id="read" resultMap="artMapper">
+ 		SELECT
+ 			a.bno bno,
+ 			a.categorie categorie,
 	 		a.region region,
-	 		a.title title,
-	 		a.content content,
-	 		a.address address,
-	 		a.writer writer,
-	 		a.galleryName galleryName,
+ 			a.title title,
+ 			a.content content,
+ 			a.address address,
+ 			a.writer writer,
+ 			a.regDate regDate,
+ 			a.updateDate updateDate,
+ 			a.galleryName galleryName,
 	 		a.startDate startDate,
 	 		a.endDate endDate,
-	 		f.fileName fileName,
-	 		m.nick writerName,
-	 		m.fileName profile
-	 	FROM a_board a LEFT JOIN a_file f ON a.bno = f.bno
+	 		a.views views,
+ 			m.nick writerName,
+ 			m.fileName profile,
+ 			f.fileName fileName,
+ 		-- count reply
+ 				(SELECT COUNT(*) FROM a_reply r WHERE r.bno = a.bno) replyCnt,
+ 				
+ 		-- sum likes
+ 			(SELECT IFNULL(SUM(l.lno), 0) FROM a_likes l WHERE l.bno = a.bno) likesCnt
+ 		FROM a_board a 
+ 						LEFT JOIN a_file f ON a.bno = f.bno
  						JOIN member m ON a.writer = m.usermail
- 		WHERE a.bno = #{bno}
+ 					-- LEFT JOIN a_reply r ON a.bno = r.bno
+ 					-- LEFT JOIN a_likes l ON a.bno = l.bno
+ 		where a.bno = #{bno}
  	</select>
+ 	
+ 	<resultMap type="com.book.domain.ArtBoardVO" id="artMapper">
+ 		<id property="bno" column="bno"/>
+ 		<result property="categorie" column="categorie" />
+ 		<result property="region" column="region"/>
+ 		<result property="title" column="title"/>
+ 		<result property="content" column="content"/>
+ 		<result property="address" column="address"/>
+ 		<result property="writer" column="writer"/>
+ 		<result property="regDate" column="regDate"/>
+ 		<result property="updateDate" column="updateDate"/>
+ 		<result property="galleryName" column="galleryName"/>
+ 		<result property="startDate" column="startDate"/>
+ 		<result property="endDate" column="endDate"/>
+ 		<result property="views" column="views"/>
+ 		<result property="writerName" column="writerName"/>
+ 		<result property="profile" column="profile"/>
+ 		<result property="fileName" column="fileName"/>
+ 	</resultMap>
+ 	
+ 	
  	
  	<delete id="delete">
  		DELETE
@@ -140,7 +172,7 @@
  	<update id="update">
  		UPDATE a_board
  		SET
- 			 categorie = #{catagorie},
+ 		     categorie = #{categorie},
 	 		 region = #{region},
 	 		 title = #{title},
 	 		 content = #{content},
@@ -148,7 +180,7 @@
 	 		 writer = #{writer},
 	 		 galleryName = #{galleryName},
 	 		 startDate = #{startDate},
-	 		 endDate = #{endDate}
+	 		 endDate = #{endDate},
 	 		 updateDate = NOW()
  		WHERE
  			bno = #{bno}			
@@ -169,10 +201,4 @@
  		WHERE bno = #{bno}
  	</update>
  	
- 	<update id="likes">
- 		UPDATE a_board
- 		SET likes = likes + 1
- 		WHERE bno=#{bno}
- 	</update>
- 
  </mapper>

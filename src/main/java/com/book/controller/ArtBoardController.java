@@ -101,8 +101,7 @@ public class ArtBoardController {
 			Long one = 1L;
 			if (one.equals(likeClicked)) {
 				vo.setLikeClicked(true);
-				log.info(vo);
-				service.likes(bno);			
+				log.info(vo);		
 			}
 		}
 		
@@ -133,7 +132,7 @@ public class ArtBoardController {
 		return "redirect:/art/list";
 	}
 	
-	@PostMapping("/delete")
+	@RequestMapping("/delete")
 	@PreAuthorize("principal.username == #writer")
 	public String delete(@RequestParam("bno") Long bno, Criteria cri, RedirectAttributes rttr, String writer) {
 		log.info("artoard_삭제페이지!");

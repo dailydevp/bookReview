@@ -24,7 +24,7 @@ public class ArtBoardVO {
 	private Date period;
 	private int likes;
 	private int views;
-	
+	private String profile;
 	private boolean likeClicked;
 
 	private int replyCnt;

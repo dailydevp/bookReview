@@ -17,6 +17,8 @@
 	var appRoot = "${appRoot}";
 	var usermail = "${pinfo.user.usermail}";
 	var bno = "${artboard.bno }";
+	var reply = "${artboard.replyCnt}";
+	var likes =" ${artboard.likesCnt } ";
 /* var fileName = "${artboard.fileName}";
 var fileName2 = "${board.fileName}";
 var bno = "${artboard.bno}";
@@ -50,7 +52,8 @@ $(function () {
 </script>
 <style>
 img{
-	width : 240px;
+	width : 220px;
+	height : 220px;
 }
 
 li{

@@ -29,6 +29,8 @@ public interface UserMapper {
 	public UserVO checkPw(String userpw);
 
 	public List<UserVO> list();
+	
+	public UserVO info(long bno);
 
-
+	public UserVO findmail(String phoneNo);
 }

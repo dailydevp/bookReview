@@ -25,7 +25,7 @@
   		m.nick nick,
   		m.phoneNo phoneNo,
   		m.regdate regdate,
-  		a.auth auth
+  		a.auth role
   	FROM
   		member m LEFT JOIN auth a
   		ON m.usermail = a.usermail
@@ -47,6 +47,22 @@
 		WHERE 
 			m.usermail = #{usermail}
 		
+	</select>
+	
+	<select id="info" resultMap="userInfo">
+		SELECT
+			m.usermail usermail,
+			m.nick nick,
+			m.phoneNo phoneNo,
+			m.regdate regdate,
+			m.fileName fileName,
+			b.bno bno
+		FROM
+			member m LEFT JOIN b_board b
+			ON m.usermail = b.usermail
+		WHERE
+			b.bno = #{bno}
+			
 	</select>
 	
 	<update id="update">
@@ -110,6 +126,18 @@
 		WHERE
 			usermail = #{usermail}
 	</update>
+	
+	<select id="findmail" resultMap="userMapper">
+		SELECT
+			m.usermail usermail,
+			m.phoneNo phoneNo,
+			a.usermail usermail
+		FROM
+			member m LEFT JOIN auth a
+			ON m.usermail = a.usermail
+		WHERE
+			m.phoneNo = #{phoneNo}
+	</select>
   
 
   
@@ -121,7 +149,17 @@
   	<result property="phoneNo" column = "phoneNo" />
   	<result property="regdate" column = "regdate" />
   	<result property="fileName" column="fileName" />
-  	<collection property="authList" resultMap="authMapper"/>
+  	<result property="role" column="role" />
+   	<collection property="authList" resultMap="authMapper"/> 
+  </resultMap>
+  
+  <resultMap type="com.book.domain.UserVO" id="userInfo">
+  	<id property="bno" column ="bno" />
+  	<result property="usermail" column="usermail"/>
+  	<result property="nick" column ="nick" />
+  	<result property="phoneNo" column = "phoneNo" />
+  	<result property="regdate" column = "regdate" />
+  	<result property="fileName" column="fileName" />
   </resultMap>
   
   <resultMap type="com.book.domain.AuthVO" id="authMapper">

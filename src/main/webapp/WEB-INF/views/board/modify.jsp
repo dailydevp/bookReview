@@ -109,18 +109,18 @@ $(document).ready(function(e) {
 					  })
 					  .done(function(info) {
 						console.log(info);
-						if(info != null){
+						if(info != null && info != ""){
 							$("#coverimg").append("<img src='" + info.documents[0].thumbnail + "'/><br>");
 							$("h5").append(info.documents[0].title);
 							$(".card-text").append(info.documents[0].contents);
 							$(".card-author").append(info.documents[0].authors);
-						}else{
-							alert("정보이미등록되잇슈");
+						
 						}
-							});							
-				
+							});
+					  
 
 		});	
+					  alert("제목을 입력해주세요");
 	});
 	
 	 
@@ -329,11 +329,11 @@ Modal
 					<div class="form-group">
 						<div class="card mb-3" style="max-width: 60%; border: none;">
 							<div class="row g-0">
-								<div class="col-md-4" id="coverimg"></div> 
+								<div class="col-md-4" id="coverimg" ></div> 
 								<div class="col-md-8">
 									<div class="card-body">
-										<h5 class="card-title"></h5>
-										<p class="card-author"></p>
+										<h5 class="card-title"><input hidden name="title"/></h5>
+										<p class="card-author"><input hidden class="author" id="author" name="author" ></p>
 										<p class="card-text"></p>
 									</div>
 								</div>

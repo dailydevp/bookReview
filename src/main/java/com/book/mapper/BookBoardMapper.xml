@@ -167,6 +167,7 @@
  			title = #{title},
  			content = #{content},
  			writer = #{writer},
+ 			author = #{author},
  			updateDate = NOW()
  		WHERE
  			bno = #{bno}

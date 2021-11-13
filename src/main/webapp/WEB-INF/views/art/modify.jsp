@@ -7,7 +7,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fd156c1a570eab2e059dc842c7970571&libraries=services"></script>
 
 <style>
 
@@ -20,6 +19,10 @@ img {
 	resize: none;
 	border:none;
 	}
+	
+#map {
+	
+}
 	
 *:focus {
     outline: none;
@@ -40,9 +43,8 @@ img {
 				<input hidden name="bno" value="${board.bno }">
 					  <div class="form-group">
 					    <label for="categories"></label>
-					      <select class="form-control" id="categories" name ="categorie" style="width : 120px;">    
+					      <select class="form-control" id="categories" name ="categorie" style="width : 120px;" hidden>    
 					      	<option>ART</option>   
-					      	<option>BOOK</option>
 					      </select>
 					  </div>
 					  <div class="form-group">
@@ -67,12 +69,9 @@ img {
 					</div>
 				</div>
 				
-					<div class="form-group">
-							  <form onsubmit="searchPlaces(); return false;">
-								<label for="galleryName"></label>
-								<input id="galleryName" class="form-control" name="galleryName" value="${board.galleryName }">
-								<button type="submit">검색</button>
-								</form>
+					<div class="place">
+						<label for="galleryName"></label>
+						<input type="text" id="galleryName" class="form-control" name="galleryName" value="${board.galleryName }" onclick="searchPlaces()">
 						
 					</div>
 					
@@ -97,7 +96,7 @@ img {
 			
 		
 			
-<div id="map" style="width:100%;height:350px;"></div>
+<div id="map" style="width:350px;height:350px;"></div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fd156c1a570eab2e059dc842c7970571&libraries=services">
 </script>
 
@@ -171,18 +170,21 @@ function displayMarker(place) {
     // 마커에 클릭이벤트를 등록합니다
     kakao.maps.event.addListener(marker, 'click', function() {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+        infowindow.setContent('<div style="padding:5px;font-size:12px; ">' + place.place_name +"<br>"+ place.address_name + '</div>');
         infowindow.open(map, marker);
     });
 }
 </script>
 
 			<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
-- 				
+			
 		
 			<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 			<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fd156c1a570eab2e059dc842c7970571&libraries=services"></script>
 			<script>
+			
+				
+			
 			    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 			        mapOption = {
 			            center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
@@ -218,11 +220,11 @@ function displayMarker(place) {
 			                        var coords = new daum.maps.LatLng(result.y, result.x);
 			                        // 지도를 보여준다.
 			                        mapContainer.style.display = "block";
-			                        map.relayout();
+			                 /*        map.relayout();
 			                        // 지도 중심을 변경한다.
 			                        map.setCenter(coords);
 			                        // 마커를 결과값으로 받은 위치로 옮긴다.
-			                        marker.setPosition(coords) 
+			                        marker.setPosition(coords)  */
 			                    }
 			                });
 			            }
@@ -245,7 +247,7 @@ function displayMarker(place) {
 					</div>
 					<div class="form-group">
 						<label for="file"></label>
-						<input id="file" class="form-control" type="file" name="file">
+						<input id="file" class="form-control" type="file" name="file" value="${board.fileName }">
 					</div>
 					
 							<input hidden name="pageNo" value="${cri.pageNo }" />

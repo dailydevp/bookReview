@@ -16,7 +16,7 @@
 
 
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light" >
+<nav class="navbar navbar-expand-sm navbar-light bg-light" id="navbar">
 
 	<ul class="navbar-nav ml-auto">
 	
@@ -35,14 +35,17 @@
 	  		
 	 			</form>
   			  </sec:authorize>
-	        	      
-	        
+  			  
+			  <sec:authorize access="hasRole('ROLE_ADMIN')">
+  			  	<a class="nav-link" href="${appRoot }/member/list">MEMBERINFO</a>
+  			  </sec:authorize>
+	        	
 	          <a class="nav-link" href="${appRoot }/board/list">BOOK</a>
 	          <a class="nav-link" href="${appRoot }/art/list">ART</a>
 	   
 
 	      
-	      <div class="box">
+	      <span class="box">
 	        <form class="d-flex">
 	        	<select name="type" hidden class="form-control mr-sm-2">
 	        		<option value="T" ${cri.type == "T" ? 'selected' : '' }>제목</option>
@@ -57,9 +60,13 @@
 			   	  	<button id ="search" type="submit"><i class="fas fa-search" ></i></button>
 			   	  </a>			   	  
 		    </form>
-	      </div>
+	      </span>
 	</ul>
 </nav>
+
+
+
+
 
 
 

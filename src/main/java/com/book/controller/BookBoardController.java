@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,6 +82,29 @@ public class BookBoardController {
 		
 	}
 	
+	@GetMapping("/write2")
+	//@PreAuthorize("isAuthenticated()")
+	public void write2(@ModelAttribute("cri") Criteria cri) {
+	
+		
+	}
+	
+	@PostMapping("/write2")
+
+	public String write2(BookBoardVO board, @RequestParam("file") MultipartFile[] file, RedirectAttributes rttr) {
+		log.info("책 글작성22222");
+
+	//	service.write(board, file);
+		
+		rttr.addFlashAttribute("result", board.getBno());
+		rttr.addFlashAttribute("messageTitle", "등록 성공!");
+		rttr.addFlashAttribute("messageBody", board.getBno() + "번 게시물이 등록 되었습니다.");
+		
+		return "redirect:/board/list";
+		
+		
+	}
+	
 	@PostMapping("/write")
 	@PreAuthorize("isAuthenticated()")
 	public String write(BookBoardVO board, @RequestParam("file") MultipartFile[] file, RedirectAttributes rttr) {
@@ -95,6 +120,9 @@ public class BookBoardController {
 		
 		
 	}
+	
+//	@PatchMapping("/modifyDemo")
+//	public void dome(@RequestBody Long bno, @ModelAttribute("cri"))
 	
 	@GetMapping({"/read","/modify"})
 	public void read(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model, Principal principal) {
@@ -121,7 +149,7 @@ public class BookBoardController {
 		
 		model.addAttribute("board", vo);
 		
-	//	service.views(bno);
+		service.views(bno);
 	}
 	
 

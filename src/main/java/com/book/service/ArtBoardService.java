@@ -17,11 +17,11 @@ public interface ArtBoardService {
 	
 	public void write(ArtBoardVO board);
 	
-	public void write(ArtBoardVO board, MultipartFile file);
+	public void write(ArtBoardVO board, MultipartFile[] file);
 	
 	public boolean modify(ArtBoardVO board);
 	
-	public boolean modify(ArtBoardVO board, MultipartFile file);
+	public boolean modify(ArtBoardVO board, MultipartFile[] file);
 	
 	public boolean delete(Long bno);
 	

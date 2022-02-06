@@ -249,7 +249,7 @@ $(function() {
 </div>
 	
 					
-<!-- 					
+					
 					  <input type="text" id="bookName">
    					 <button id="search">검색</button>
  
@@ -282,7 +282,7 @@ $(function() {
                 });
             })
         })
-        </script> -->
+        </script> 
 					
 					<input type="submit" class="btn btn-primary" id="writeBtn" value="작성등록" />
 			</form>

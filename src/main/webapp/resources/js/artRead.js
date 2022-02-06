@@ -5,6 +5,18 @@
  
  	 var appRoot = window.appRoot ? window.appRoot : '';
     var boardBno = window.boardBno ? window.boardBno : 0;
+    
+        	$("#listPagenation a").click(function (e) {
+		e.preventDefault();
+		
+		console.log("a요소 클릭됨");
+		
+	var actionForm = $("#actionForm");
+	
+	actionForm.find("[name=pageNo]").val($(this).attr("href"));
+	
+	actionForm.submit();
+	});
  
 	function showModifyModal(rno){
 		$.ajax({
@@ -176,6 +188,19 @@
 			})
 		}
 	});
+	
+		$(document).ready(function deleteCheck() {
+	$("#delete").click(function() {
+		var deleteUrl = appRoot + "/art/delete";
+		var readUrl = appRoot +"/art/read";
+		var msg = confirm("글을 삭제하시겠습니...?");
+		if(msg == true){
+			$("#readForm").attr("action", deleteUrl).submit();
+		}else{
+			return appRoot + "/art/list";
+		}
+	})
+})
 	
 	
 	$('.likesBtn').click(function(){

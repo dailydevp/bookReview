@@ -68,10 +68,10 @@ public class ArtBoardController {
 	
 	@PostMapping("/write")
 	@PreAuthorize("isAuthenticated()")
-	public String write(ArtBoardVO board, @RequestParam("file") MultipartFile file, RedirectAttributes rttr) {
+	public String write(ArtBoardVO board, @RequestParam("file") MultipartFile[] file, RedirectAttributes rttr) {
 		log.info("art 글작성");
 		
-		board.setFileName(file.getOriginalFilename());
+//		board.setFileName(file.getOriginalFilename());
 		
 		service.write(board, file);
 		
@@ -84,7 +84,7 @@ public class ArtBoardController {
 		
 	}
 	
-	@RequestMapping({"/read" , "/modify"})
+	@GetMapping({"/read" , "/modify"})
 	public void read(@RequestParam("bno")Long bno, @ModelAttribute("cri") Criteria cri, Model model, Principal principal) {
 		log.info("artboard read! 읽기");
 		log.info(model);
@@ -101,7 +101,8 @@ public class ArtBoardController {
 			Long one = 1L;
 			if (one.equals(likeClicked)) {
 				vo.setLikeClicked(true);
-				log.info(vo);		
+				log.info(vo);	
+				
 			}
 		}
 		
@@ -113,7 +114,7 @@ public class ArtBoardController {
 	
 	@PostMapping("/modify")
 	@PreAuthorize("principal.username == #board.writer")
-	public String modify(ArtBoardVO board, Criteria cri, @RequestParam("file") MultipartFile file, RedirectAttributes rttr) {
+	public String modify(ArtBoardVO board, Criteria cri, @RequestParam("file") MultipartFile[] file, RedirectAttributes rttr) {
 		log.info("artboard_수정페이지!");
 		
 		boolean success = service.modify(board, file);
@@ -132,7 +133,7 @@ public class ArtBoardController {
 		return "redirect:/art/list";
 	}
 	
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
 	@PreAuthorize("principal.username == #writer")
 	public String delete(@RequestParam("bno") Long bno, Criteria cri, RedirectAttributes rttr, String writer) {
 		log.info("artoard_삭제페이지!");

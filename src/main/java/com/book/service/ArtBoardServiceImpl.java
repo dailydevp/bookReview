@@ -91,16 +91,20 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 
 	@Override
 	@Transactional
-	public void write(ArtBoardVO board, MultipartFile file) {
+	public void write(ArtBoardVO board, MultipartFile[] mfile) {
 		write(board);
 		
-		if(file !=null && file.getSize()>0) {
-			ArtFileVO vo = new ArtFileVO();
-			vo.setBno(board.getBno());
-			vo.setFileName(file.getOriginalFilename());
+		for(MultipartFile file : mfile) {
 			
-			fileMapper.insert(vo);
-			upload(board, file);
+			if(file !=null && file.getSize()>0) {
+				ArtFileVO vo = new ArtFileVO();
+				vo.setBno(board.getBno());
+				vo.setFileName(file.getOriginalFilename());
+				
+				fileMapper.insert(vo);
+				upload(board, file);
+			}
+			
 		}
 		
 	}
@@ -130,19 +134,24 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 
 	@Override
 	@Transactional
-	public boolean modify(ArtBoardVO board, MultipartFile file) {
+	public boolean modify(ArtBoardVO board, MultipartFile[] mfile) {
 		
-		if (file != null & file.getSize()>0) {
-			ArtBoardVO exBoard = mapper.read(board.getBno());
-			deleteFile(exBoard);
-			upload(board, file);
+		ArtBoardVO exBoard = mapper.read(board.getBno());
+		deleteFile(exBoard);
+		
+		fileMapper.deleteByBno(board.getBno());
+		
+		for(MultipartFile file : mfile) {
 			
-			fileMapper.deleteByBno(board.getBno());
-			
-			ArtFileVO vo = new ArtFileVO();
-			vo.setBno(board.getBno());
-			vo.setFileName(file.getOriginalFilename());
-			fileMapper.insert(vo);
+			if (file != null & file.getSize()>0) {
+				upload(board, file);
+				
+				
+				ArtFileVO vo = new ArtFileVO();
+				vo.setBno(board.getBno());
+				vo.setFileName(file.getOriginalFilename());
+				fileMapper.insert(vo);
+			}	
 		}
 		return modify(board);
 		
@@ -159,6 +168,7 @@ public class ArtBoardServiceImpl implements ArtBoardService{
 		s3.deleteObject(deleteObjectRequest);
 		
 	}
+	
 	@Override
 	public boolean delete(Long bno) {
 		log.info("delete process" + bno);

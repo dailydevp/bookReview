@@ -131,6 +131,11 @@ img {
 
 }
 
+#delete{
+	border-color:transparent;
+	background-color: white;
+}
+
 
 #title{
 	font-size: 40px;
@@ -171,6 +176,8 @@ img {
 	<div class="readContent">
 		<div class="read-header">
 				<div class="title_form">
+				<form id="readForm" action="${appRoot }/art/read" method="post" enctype="multipart/form-data">
+				<input hidden name="bno" value="${board.bno }">
 					<div class="header-info">
 						<label for="title"></label>
 						<input id="title" class="form-control-plaintext" name="title" value="${board.title }" readonly>
@@ -186,15 +193,20 @@ img {
 							<div class="articleInfo">
 								<div class="writerInfo">
 									
-											<c:if test="${not empty pinfo.user.fileName }">
-												<div>
-													<img id="profile" src="${profile}${pinfo.user.usermail }/${pinfo.user.fileName}">
-												</div>
-											</c:if>
+									<img id="profile"
+										 <c:if test="${empty board.profile }">
+								    	 	 src="${profile }basicProfile/basicImage.png"
+								    	  </c:if>
+										
+										<c:if test="${not empty board.profile }">
+											src="${profile }${board.writer }/${board.profile }"
+										</c:if>
+									>
+		
 								
 									
 									<input type = "hidden" id="writer" class="form-control-plaintext" name="writer" value="${board.writer }" readonly>	
-									<a href="${appRoot }/member/myinfo"><span>${board.writerName }</span></a>
+									<a href="${appRoot }/member/viewInfo"><span>${board.writerName }</span></a>
 										<span class="regdate">
 											<fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd HH:mm"/>
 										</span>			
@@ -214,7 +226,8 @@ img {
 											
 												<c:if test="${pinfo.user.usermail eq board.writer }" >
 													<a href="${modifyUrl }">수정</a> |
-													<a href="${appRoot }/art/delete">삭제</a>
+													<input type="submit" id="delete" onclick="deleteCheck()" value="삭제">
+													<%-- <a href="${appRoot }/art/delete">삭제</a> --%>
 												</c:if>
 											</ul>
 										</span>																				
@@ -230,11 +243,13 @@ img {
 				
 			<div class="galleryContents">
 				<div class="photoZone">
-					<c:if test="${not empty board.fileName }">
-						<div class="photoInfo">
-							<img class="img-fluid"
-							src ="${imgRoot}art/${board.bno }/${board.fileName }">
-						</div>
+					<c:if test="${not empty board.fileName }" >
+						<c:forEach items="${board.fileName }" var="imgs">
+							<div class="photoInfo">
+								<img class="img-fluid"
+								src ="${imgRoot}art/${board.bno }/${imgs }">
+							</div>
+						</c:forEach>
 					</c:if>
 				</div>
 					<div class="form-group">
@@ -249,13 +264,13 @@ img {
 				<label for="address"></label>
 				<input id="address" class="form-control-plaintext" name="address" value="${board.address }"readonly>
 			</div>
-		<div id="map" style="width:350px;height:350px;"></div>
+		<aside>
+	<div id="map" style="width:350px;height:350px;"></div>
 	
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fd156c1a570eab2e059dc842c7970571&libraries=services"></script>
 	<script>
 	// 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
 	var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = { 
 	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -264,31 +279,24 @@ img {
 	
 	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 	var map = new kakao.maps.Map(mapContainer, mapOption); 
-
 	// 장소 검색 객체를 생성합니다
 	var ps = new kakao.maps.services.Places(); 
-
 	// 키워드로 장소를 검색합니다
-	ps.keywordSearch('${board.address}', placesSearchCB); 
-
+	ps.keywordSearch('${board.galleryName}', placesSearchCB); 
 	// 키워드 검색 완료 시 호출되는 콜백함수 입니다
 	function placesSearchCB (data, status, pagination) {
 	    if (status === kakao.maps.services.Status.OK) {
-
 	        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
 	        // LatLngBounds 객체에 좌표를 추가합니다
 	        var bounds = new kakao.maps.LatLngBounds();
-
 	        for (var i=0; i<data.length; i++) {
 	            displayMarker(data[i]);    
 	            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
 	        }       
-
 	        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
 	        map.setBounds(bounds);
 	    } 
 	}
-
 	// 지도에 마커를 표시하는 함수입니다
 	function displayMarker(place) {
 	    
@@ -297,26 +305,27 @@ img {
 	        map: map,
 	        position: new kakao.maps.LatLng(place.y, place.x) 
 	    });
-
 	    // 마커에 클릭이벤트를 등록합니다
 	    kakao.maps.event.addListener(marker, 'click', function() {
 	        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-	        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+	        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name +"<br>"+ place.address_name + '</div>');
 	        infowindow.open(map, marker);
 	    });
 	}
 	
 	</script>
+		</aside>	
 		
 		</div>
-
 		
+		</form>
+	
 			<div class="replyZone">		
 			
 					
-				<i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong><c:out value="${board.replyCnt }" /></strong>
+				<td><i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong><c:out value="${board.replyCnt }" /></strong></td>
 			
-				<span id="likes">
+				<td><span id="likes">
 					<c:choose>
 						<c:when test="${!board.likeClicked}">
 						<span class="likesBtn">
@@ -331,7 +340,7 @@ img {
 							<input type="hidden" class="likesCheck" value="${lno }">
 						</c:when>					
 					</c:choose>
-				좋아요&nbsp;<strong>${board.likesCnt }</strong></span>		
+				좋아요&nbsp;<strong>${board.likesCnt }</strong></span>	</td>	
 			</div>
 		
 				

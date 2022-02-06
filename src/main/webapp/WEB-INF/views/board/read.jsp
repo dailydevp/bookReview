@@ -10,6 +10,7 @@
 <head>
 <script src="${appRoot }/resources/js/read.js"></script> 
 
+
 <script>
 var appRoot = "${appRoot}";
 var boardBno = "${board.bno}";
@@ -20,6 +21,34 @@ var boardlike = "${board.likes }";
 var boardlike2 = "${board.likesCnt }";
 var bb = "${board.views }";
 var filesss = "${imgRoot}book/${board.bno }/${board.fileName}";
+
+
+$(function() {
+		$("#title").ready(function() {
+				  $.ajax({
+					  method: "GET",
+					  url:"https://dapi.kakao.com/v3/search/book?target=title",
+			          headers: {Authorization: "KakaoAK fbe438ce8e023b64b82b9eb13c6ea2a3"},
+			          data: { 
+			        	  query: $("#title").val()
+			        	  }
+				  })
+				  .done(function(info) {
+					console.log(info);
+					if(info != null && info != ""){
+						$("#coverimg").append("<img src='" + info.documents[0].thumbnail + "'/><br>");
+						$("h4").append(info.documents[0].title);
+						$(".card-text").append(info.documents[0].contents);
+						$(".card-author").append(info.documents[0].authors);
+					
+					}
+						});
+				  
+
+	});	
+				 
+});
+
 </script>
 
 <style>
@@ -61,9 +90,13 @@ span{
 	padding-bottom: 0px;
 }
 
+	
+
 
 img {
-	width : 300px;
+	width : 180px; 
+	height : 250px;
+	margin-top: 25px;
 }
 
 
@@ -127,6 +160,7 @@ img {
 	
 #text{
 	resize: none;
+	border:none;
 }
 	
 #replyText {
@@ -193,7 +227,7 @@ img {
 							>
 		
 									<input type = "hidden" id="writer" class="form-control-plaintext" name="writer" value="${board.writer }" readonly>	
-									<a href="${appRoot }/member/myinfo"><span>${board.writerName }</span></a>
+									<a href="${appRoot }/member/viewInfo"><span>${board.writerName }</span></a>
 										<span class="regdate">
 											<fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd HH:mm"/>
 										</span>		
@@ -251,12 +285,26 @@ img {
 		
 					
 			<div class="form-group">
+						<div class="card mb-3" style="max-width: 60%; border: none;">
+							<div class="row g-0">
+								<div class="col-md-4" id="coverimg" ></div> 
+								<div class="col-md-8">
+									<div class="card-body">
+										<h4 class="card-title"><input hidden name="title"/></h4>
+										<p class="card-author"><input hidden class="author" id="author" name="author" ></p>
+										<p class="card-text"></p>
+									</div>
+								</div>
+							
+							</div>
+						</div>
+						<hr>
 				<label for="text"> </label>
 				<textarea id="text" class="form-control-plaintext" name="content" rows="5" readonly> ${board.content } </textarea>
 			</div>
 		
 		
-			<div class="form-group">		
+			<div class="form-groups">		
 
 				<i class="far fa-comment"></i>&nbsp;댓글&nbsp;<strong>${board.replyCnt }</strong>
 			

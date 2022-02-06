@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,9 +65,17 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/userinfo")
-	@PreAuthorize("isAuthenticated()")
-	public void userinfo(Criteria cri, Principal principal, Model model) {
+	//@PreAuthorize("isAuthenticated()")
+	public void userinfo(@RequestParam("bno") Long bno ,Criteria cri, Principal principal, Model model) {
 		log.info("userInfo");
+		UserVO users = service.info(bno);
+		
+		model.addAttribute("users", users);
+	}
+	
+	@GetMapping("/viewInfo")
+	public void viewInfo(Criteria cri, Principal principal, Model model) {
+		log.info("남이 보는 유저");
 		UserVO users = service.read(principal.getName());
 		
 		model.addAttribute("users", users);
@@ -232,24 +241,45 @@ public class MemberController {
 	public void findpw() {
 		
 	}
-//	
-//	@PostMapping("/findpw")
-//	public String findpw() {
-//		MemberVO user = service.check(email);
-//		
-//		if(user != null && user.getEmail().equals(email)) {
-//					int ranNo = (int)(Math.random() * (99999-10000 + 1)) + 10000;
-//					String tempPw = String.valueOf(ranNo);
-//					user.setUserpw(tempPw);
-//					service.modify(user);
-//					
-//					String subject = "임시 비밀 번호 발급 안내";
-//					StringBuilder bds = new StringBuilder();
-//					bds.append("임시 비밀번호는" + tempPw + "입니다.");
-//					service.send(subject, bds.toString(),"testaddr67@gmail.com", email);
-//		}
-//		return "redirect: ${appRoot}/member/findpw";
-//	}
+	
+	@PostMapping("/findpw")
+	public String findpws(HttpSession session, @RequestParam String useremail) {
+		UserVO user = service.check(useremail);
+	
+		if(user != null && user.getUsermail().equals(useremail)) {
+					int ranNo = (int)(Math.random() * (99999-10000 + 1)) + 10000;
+					String tempPw = String.valueOf(ranNo);
+					user.setUserpw(tempPw);
+					service.modify(user);
+					
+					String subject = "임시 비밀 번호 발급 안내";
+					StringBuilder bds = new StringBuilder();
+					bds.append("임시 비밀번호는" + tempPw + "입니다.");
+					service.send(subject, bds.toString(),"testaddr67@gmail.com", useremail);
+		}
+		return "redirect: ${appRoot}/member/findpw";
+	}
+	
+	@GetMapping("/findid")
+	public void findid() {
+	}
+	
+	@GetMapping("/findmail")
+	@ResponseBody
+	public ResponseEntity<String[]> findid(String phoneNo, RedirectAttributes rttr) {
+		log.info("find id");
+		
+		UserVO user = service.findmail(phoneNo);
+		
+		if(user == null) {
+			return new ResponseEntity<> (new String[] {"fail", ""}, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<> (new String[] {"exist", user.getUsermail()}, HttpStatus.OK);
+		}
+	}
+	
+	
+
 
 	@PostMapping("/profileUpload")
 	@PreAuthorize("principal.username == #usermail")

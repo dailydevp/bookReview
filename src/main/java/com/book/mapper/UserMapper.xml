@@ -65,6 +65,23 @@
 			
 	</select>
 	
+	<select id="viewInfo" resultMap="userInfo">
+			SELECT
+			m.usermail usermail,
+			m.nick nick,
+			m.phoneNo phoneNo,
+			m.regdate regdate,
+			m.fileName fileName,
+			b.bno bno
+			b.writer writer
+		FROM
+			member m LEFT JOIN b_board b
+			ON m.usermail = b.writer
+		WHERE
+			m.usermail = b.writer
+	
+	</select>
+	
 	<update id="update">
 		UPDATE member
 		SET

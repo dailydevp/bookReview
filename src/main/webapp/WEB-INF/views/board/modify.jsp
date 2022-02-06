@@ -96,7 +96,9 @@ $(document).ready(function(e) {
 	  
 	  
 	  $(function() {
-			$("#title").click(function(e) {
+			$("#bookSearch").click(function() {
+				$("#exampleModal").modal('show');				
+			})
 				
 				e.preventDefault();
 					  $.ajax({
@@ -104,17 +106,19 @@ $(document).ready(function(e) {
 						  url:"https://dapi.kakao.com/v3/search/book?target=title",
 				          headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"},
 				          data: { 
-				        	  query: $("#title").val()
+				        	  query: $("#bookName").val()
 				        	  }
 					  })
 					  .done(function(info) {
 						console.log(info);
 						if(info != null && info != ""){
-							$("#coverimg").append("<img src='" + info.documents[0].thumbnail + "'/><br>");
-							$("h5").append(info.documents[0].title);
-							$(".card-text").append(info.documents[0].contents);
-							$(".card-author").append(info.documents[0].authors);
+							 for (var i = 0; i < documents.length; i++){
+							$("#coverimg").append("<img src='" + info.document[i].thumbnail + "'/><br>");
+							$("h5").append(info.documents[i].title);
+							$(".card-text").append(info.documents[i].contents);
+							$(".card-author").append(info.documents[i].authors);
 						
+						}
 						}
 							});
 					  
@@ -167,164 +171,8 @@ $(document).ready(function(e) {
 						</c:if>
 					</div>
 
-    
-
-<!-- 
-								
-					<div <!-- class="form-group">
-									   
-     <input type="text"  id="bookName">
-    <button id="bookSearch" class="btn btn-outline-success">검색</button>
-
-  
-	    
-			  
-			  </div>
-		</div>
-
-    <script>
-        $(document).ready(function () {
-            var pageNum = 1;
-            
-            $("#bookSearch").click(function(e) {
-            	e.preventDefault();
-				$("#exampleModal").modal('show');				
-			})
-
-           $("#bookSearch").click(function (e) {
-        	   
-                $("p").html("");
- 
-                $.ajax({
-                    method: "GET",
-                    url: "https://dapi.kakao.com/v3/search/book?target=title",
-                    data: { query: $("#bookName").val(), page: pageNum},
-                    headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"} 
- 
-                })
-                .done(function (msg) {
-                    console.log(msg);
-                 
-                    for (var i = 0; i < documents.length; i++){
-                        $("a").append("<h2><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h2>");
-                        $("a").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
-                        $("a").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
- 
-			                   }			
-                });
-            }) 
-        })
- 
-  
-  </script> 
-
-</div>
-
-Modal
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-     	   <span aria-hidden="true">&times;</span> 
-        </button>
-      </div>
-      <div class="book">
-      	<div>
-		      <span></span>
-			</div>
-		    <script>
-		        $(document).ready(function () {
-		            var pageNum = 1;
-		            
-		  
-		     
-		            $("#bookSearch").click(function () {
-		            
-		                 $("span").html("");
-		  
-		                $.ajax({
-		                    method: "GET",
-		                    url: "https://dapi.kakao.com/v3/search/book?target=title",
-		                    data: { query: $("#bookName").val(), page: pageNum},
-		                    headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"} 
-		 
-		                })
-		                .done(function (msg) {
-		                    console.log(msg);
-		                    for (var i = 0; i < 10; i++){
-		                        $("span").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
-		                        $("span").append("<h3><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h3>");
-		                        $("span").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
-		                    }
-		                });
-		                
-		            })
-		        })
-		 
-
-		    </script> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>		
-	
-			
-					
-													
-					<div class="form-group">
-
- 
- 			<input type="text"  id="bookName">
-    		<button id="bookSearch" class="btn btn-outline-success">검색</button>
-			
-			
-  
-      <p></p>
-  
-    <script>
-        $(document).ready(function () {
-            var pageNum = 1;
-            
-            $("#bookSearch").click(function(e) {
-            	e.preventDefault();
-				$("#exampleModal").modal('show');				
-			})
-
-           $("#bookSearch").click(function (e) {
-                $("p").html("");
- 
-                $.ajax({
-                    method: "GET",
-                    url: "https://dapi.kakao.com/v3/search/book?target=title",
-                    data: { query: $("#bookName").val(), page: pageNum},
-                    headers: {Authorization: "KakaoAK e594a70b66d52efb1fe20ba3fe8b8771"} 
- 
-                })
-                .done(function (msg) {
-                    console.log(msg);
-                    for (var i = 0; i < 10; i++){
-                        $("p").append("<h2><a href='"+ msg.documents[i].url +"'>" + msg.documents[i].title + "</a></h2>");
-                        $("p").append("<strong>저자:</strong> " + msg.documents[i].authors + "<br>");
-                        $("p").append("<img src='" + msg.documents[i].thumbnail + "'/><br>");
-                    }
-
-                });
-            }) 
-        })
- 
-  
-    </scri
-</div>
-					
-		
-					 -->
-				
+				   <input type="text"  id="bookName">
+    			<button role="click" id="bookSearch" class="btn btn-outline-success">검색</button>
 					
 					<div class="form-group">
 						<div class="card mb-3" style="max-width: 60%; border: none;">

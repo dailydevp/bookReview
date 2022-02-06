@@ -36,7 +36,7 @@
 	      <td>${member.nick }</td>
 	      <td>${member.phoneNo }</td>
 	      <td>${member.regdate }</td>
- 	      <td>${auth.auth }</td>  
+ 	      <td>${member.role}</td>  
 	    </tr>
 	</c:forEach> 
   </tbody>

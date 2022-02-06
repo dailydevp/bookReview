@@ -33,4 +33,6 @@ public interface UserMapper {
 	public UserVO info(long bno);
 
 	public UserVO findmail(String phoneNo);
+
+	public UserVO viewInfo(String usermail);
 }

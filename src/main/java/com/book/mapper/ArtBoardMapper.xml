@@ -158,7 +158,14 @@
  		<result property="views" column="views"/>
  		<result property="writerName" column="writerName"/>
  		<result property="profile" column="profile"/>
- 		<result property="fileName" column="fileName"/>
+ 		
+ 		<!-- <result property="fileName" column="fileName"/> -->
+ 		
+ 		<collection property="fileName" resultMap="fileNameMapper"></collection>
+ 	</resultMap>
+ 	
+ 	<resultMap type="string" id="fileNameMapper">
+ 		<result property="fileName" column="fileName" />
  	</resultMap>
  	
  	

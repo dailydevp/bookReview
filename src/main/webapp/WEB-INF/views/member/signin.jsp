@@ -260,6 +260,8 @@ footer a {
     color: #3c97bf;
     text-decoration: none;
 }
+
+
 </style>
 
 <script>
@@ -406,91 +408,6 @@ window.onload = function() {
 	
 }
 </script>
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" 
-src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v12.0&appId=834096750623764&autoLogAppEvents=1" nonce="tZUgub4L">
-</script>
-
-<script>
-
-  function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
-    console.log('statusChangeCallback');
-    console.log(response);                   // The current login status of the person.
-    if (response.status === 'connected') {   // Logged into your webpage and Facebook.
-      testAPI();  
-    } else {                                 // Not logged into your webpage or we are unable to tell.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this webpage.';
-    }
-  }
-
-
-  function checkLoginState() {               // Called when a person is finished with the Login Button.
-    FB.getLoginStatus(function(response) {   // See the onlogin handler
-      statusChangeCallback(response);
-    });
-  }
-
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{834096750623764}',
-      cookie     : true,                     // Enable cookies to allow the server to access the session.
-      xfbml      : true,                     // Parse social plugins on this webpage.
-      version    : '{12}'           // Use this Graph API version for this call.
-    });
-
-
-    FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-      statusChangeCallback(response);        // Returns the login status.
-    });
-  };
- 
-  function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  }
-
-</script>
-
- <!-- Load the JS SDK asynchronously
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-    <script>
-               var checkLoginStatus = function(response){
-                 console.log(response);
-
-                 if(response.status === 'connected'){
-                     document.querySelector("#authBtn").val = 'Logout';
-                 }else{
-                     document.querySelector("#authBtn").val = 'Login';
-                 }
-             }
-
-
-
-         window.fbAsyncInit = function() {
-            FB.init({
-            appId      : '834096750623764',
-            cookie     : true,                     // Enable cookies to allow the server to access the session.
-            xfbml      : true,                     // Parse social plugins on this webpage.
-            version    : 'v11.0'           // Use this Graph API version for this call.
-            });
-
-
-
-             FB.getLoginStatus(checkLoginStatus);
-
-
-        };
-
-  -->
-
- 
-    </script>
 
 <title>BOOK AND ART</title>
 </head>
@@ -501,28 +418,10 @@ src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v12.0&appId=83409
 	
 		<c:if test="${param.status == 'success' }">
 		<script>
-	 		alert('회원가입을 축하드립니다.')
+	 		alert('회원가입을 축하드립니다.');
 		</script>	
 	</c:if>
 	
-	<!--  
-	        <input type="button" id="authBtn" value="checking...." onclick="
-        
-        if(this.value === 'Login'){
-            //now Logout
-            FB.login(function(res){
-                console.log('login =>',res);
-                checkLoginStatus(res);
-            });
-        }else{
-            //now login
-            FB.logout(function(res){
-                console.log('logout =>',res);
-                checkLoginStatus(res);
-              });
-             }
-          ">
-	-->
 	
 	
 	
@@ -557,7 +456,12 @@ src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v12.0&appId=83409
 			<span>or use your account</span>
 			<input type="email" id="mailBtn" name="username" required="required" placeholder="Email" />
 			<input type="password" id="passwordBtn" name="password" required="required"placeholder="Password" />
-			<a href="${appRoot }/member/findpw">Forgot your password?</a>
+			<div class="form-check form-check-inline">
+			<label class="form-check-label" for="remember-me" style="font-size: 14px; width: 130px; float : right;">자동로그인</label>
+			<input type="checkbox" id="remember-me" name="remember-me" class="form-check-input" />
+			</div>
+		
+			<span><a href="${appRoot }/member/findid">Forgot your Email?</a></span>
 			<button type="submit" name="button" id="signinBtn">Sign In</button>
 		</form>
 	</div>

@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.book.domain.ArtBoardVO;
+import com.book.domain.ArtPageDTO;
 import com.book.domain.BookBoardVO;
 import com.book.domain.Criteria;
 import com.book.domain.PageDTO;
+import com.book.service.ArtBoardService;
 import com.book.service.BookBoardSerive;
 
 import lombok.Setter;
@@ -26,29 +29,23 @@ public class MainController {
 	@Setter(onMethod_=@Autowired)
 	private BookBoardSerive service;
 	
+	@Setter(onMethod_=@Autowired)
+	private ArtBoardService aservice;
 	
-	@GetMapping("/test")
-	public void test() {
-		
-	}
 
-	@GetMapping("/homePage")
-	public void homePage() {
-		log.info("mainaPages");
-	}
-	
-	@GetMapping("/homep")
-	public void homep() {
-		
-	}
 	
 	@GetMapping("/home")
 	public void home(@ModelAttribute("cri")Criteria cri, Model model, Principal principal) {
 		int total = service.getTotal(cri);
 		List<BookBoardVO> list = service.getList(cri);
+		List<ArtBoardVO> alist = aservice.getList(cri); 
+		
 		
 		model.addAttribute("list" , list);
 		model.addAttribute("pageMaker" , new PageDTO(cri, total));
+		
+		model.addAttribute("alist" , alist);
+		model.addAttribute("pageMaker" , new ArtPageDTO(cri, total));
 		log.info(model);
 		log.info(principal);
 	}

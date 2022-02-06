@@ -11,6 +11,10 @@ public interface UserService {
 	
 	UserVO read(String name);
 	
+	UserVO info(long bno);
+	
+	UserVO viewInfo(String usermail);
+	
 	boolean modify(UserVO user);
 	
 	boolean delete(UserVO user);
@@ -31,5 +35,7 @@ public interface UserService {
 	
 	public List<UserVO> list();
 
-	
+	void send(String subject, String text, String from, String to);
+
+	UserVO findmail(String phoneNo);
 }

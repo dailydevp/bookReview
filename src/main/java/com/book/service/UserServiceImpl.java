@@ -5,7 +5,12 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +53,9 @@ public class UserServiceImpl implements UserService{
 	private String bucketName;
 	private String profileName;
 	private S3Client s3;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 	
 	public UserServiceImpl() {
 		this.bucketName ="ca-myuniq";
@@ -196,6 +204,51 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserVO> list() {
 		return mapper.list();
+	}
+
+
+	@Override
+	public UserVO info(long bno) {
+		return mapper.info(bno);
+	}
+	
+	
+
+
+	@Override
+	public void send(String subject, String text, String from, String to) {
+		   // javax.mail.internet.MimeMessage
+        MimeMessage message = javaMailSender.createMimeMessage();
+        
+        String ContentText = text;
+ 
+        try {
+            // org.springframework.mail.javamail.MimeMessageHelper
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setSubject("임시 비밀번호 설정");
+ //           helper.setText(text, true);
+            helper.setText(ContentText);
+            helper.setFrom(from);
+            helper.setTo(to);
+  
+ 
+            javaMailSender.send(message);
+       
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+	}
+
+
+	@Override
+	public UserVO findmail(String phoneNo) {
+		return mapper.findmail(phoneNo);
+	}
+
+
+	@Override
+	public UserVO viewInfo(String usermail) {
+		return mapper.viewInfo(usermail);
 	}
 
 
